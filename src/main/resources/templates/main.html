@@ -1,15 +1,29 @@
-<!doctype html>
-<html lang="KO">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>YUP.GG</title>
+    <th:block layout:fragment="css"></th:block>
 </head>
-<body>
-    <h1>Hello YupGG</h1>
-    <input type="text" placeholder="소환사 이름">
-    <input type="button" value="검색">
+<body style="background-color:#5383e8;">
+<div layout:fragment="content">
+    <div class="position-absolute top-50 start-50 translate-middle">
+        <h1>Hello YupGG</h1>
+        <form class="d-flex pb-5" id="searchForm">
+            <input name="searchQuery" id="searchQuery" class="form-control" type="search"
+                   placeholder="소환사 검색" aria-label="Search">
+            <button class="btn btn-outline-dark my-2 my-sm-0 btn-search" type="submit">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+                     stroke-linecap="round" stroke-linejoin="round" stroke-width="2" role="img"
+                     viewBox="0 0 24 24">
+                    <title>Search</title>
+                    <circle cx="10.5" cy="10.5" r="7.5" />
+                    <path d="M21 21l-5.2-5.2" />
+                </svg>
+            </button>
+        </form>
+    </div>
+</div>
+<th:block layout:fragment="script"></th:block>
 </body>
 </html>
