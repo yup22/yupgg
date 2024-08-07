@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+<head>
+    <th:block layout:fragment="css"></th:block>
+    <style>
+
+    </style>
+</head>
+<body style="background-color:white;">
+<div layout:fragment="content">
+    <h1>안녕 나는 <span th:text="${summoners+summonersTag}"></span>야</h1>
+</div>
+<th:block layout:fragment="script"></th:block>
+</body>
+</html>

@@ -4,15 +4,46 @@
       layout:decorate="~{layouts/layout1}">
 <head>
     <th:block layout:fragment="css"></th:block>
+    <style>
+        #searchBtn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5em; /* Adjust padding as needed */
+            border-radius: 4px; /* Adjust border radius as needed */
+            background-color: transparent; /* Adjust background color as needed */
+            cursor: pointer;
+            height: 50px;
+            width: 70px;
+            padding-right : 5px;
+        }
+        #searchBtn svg {
+            width: 20px; /* Adjust width as needed */
+            height: 20px; /* Adjust height as needed */
+        }
+    </style>
 </head>
 <body style="background-color:#5383e8;">
 <div layout:fragment="content">
-    <div class="position-absolute top-50 start-50 translate-middle">
-        <img src="/images/yupLogo.png" style="width:200px;" class="pb-2">
-        <form class="d-flex pb-5" id="searchForm">
-            <input name="searchQuery" id="searchQuery" class="form-control" type="search"
-                   placeholder="소환사 검색" aria-label="Search">
-            <button class="btn btn-outline-dark my-2 my-sm-0 btn-search" type="submit">
+    <div class="position-absolute start-50 translate-middle pt-5 my-5">
+        <img src="/images/yupLogo.png" style="width:450px;" class="pt-5 mt-5">
+    </div>
+    <div class="position-absolute top-50 start-50 translate-middle pb-5">
+        <form class="row d-flex pb-5 bg-white rounded-pill" id="searchForm" style=" width: 700px; height:50px;" action="/summoners" method="get">
+            <div class="my-2 col-2">
+                <button type="button" class=" btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    한국
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">한국</a></li>
+                </ul>
+            </div>
+            <input name="summoners" id="summoners" class="col-6 form-control border-light my-2" type="search"
+                   placeholder="소환사 이름" aria-label="Search" style="width:380px; height:35px; text-align:center;">
+            <input name="summonersTag" id="summonersTag" class="col-2 form-control border-light my-2" type="search"
+                   placeholder="태그" aria-label="Search" style="width:80px; height:35px; text-align:center;">
+
+            <button class="btn mx-3 col-2" type="submit" id="searchBtn">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
                      stroke-linecap="round" stroke-linejoin="round" stroke-width="2" role="img"
                      viewBox="0 0 24 24">
