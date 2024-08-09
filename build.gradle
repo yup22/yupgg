@@ -36,6 +36,7 @@ dependencies {
 	implementation group: 'org.springframework.boot', name: 'spring-boot-devtools', version: '3.3.2'
 	implementation 'org.thymeleaf:thymeleaf:3.1.2.RELEASE'
 	implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.3.0'
+	implementation 'com.google.code.gson:gson:2.11.0'
 
 }
 

@@ -28,7 +28,6 @@ public class RiotHttpClient {
 
     public ResponseDto getSummonerName(String puuid) {
         StringBuilder sb = new StringBuilder("/lol/summoner/v4/summoners/by-puuid/" + puuid);
-        SummonerDTO summoner = new SummonerDTO();
 
         return getRiotResponse(riotUrl, sb.toString());
     }
