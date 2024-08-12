@@ -43,10 +43,20 @@ public class SearchController {
         }
         String puuid = puuidDto.getPuuid();
         System.out.println(puuid);
+        if (!puuid.equals(null)) {
+            responseDto = new RiotHttpClient().getSummonerName(puuid);
+            if (responseDto.isOK()) {
+                ObjectMapper mapper = new ObjectMapper();
+                summonerDTO = mapper.readValue(responseDto.getResponseBody(), SummonerDTO.class);
+            }
+        }
+        System.out.println(summonerDTO.getId());
+        System.out.println(summonerDTO.getProfileIconId());
+        System.out.println(puuidDto.getGameName());
+        System.out.println(summonerDTO.getSummonerLevel());
 
-        model.addAttribute("summoners",summoners);
-        model.addAttribute("summonersTag",summonersTag);
-        model.addAttribute("summonersTag",puuid);
+        model.addAttribute("summoners",summonerDTO);
+        model.addAttribute("puuidDto",puuidDto);
         return "search/searchPage";
     }
 }

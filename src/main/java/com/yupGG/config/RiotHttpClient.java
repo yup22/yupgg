@@ -7,23 +7,30 @@ import com.yupGG.dto.SummonerDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
+@Component
 public class RiotHttpClient {
     private static final Logger logger = LoggerFactory.getLogger(RiotHttpClient.class);
-    @Value("${riot.url}")
-    private String riotUrl;
-    @Value("${riot.api.key}")
-    private String riotApiKey;
+//    @Value("${riot.url}")
+    private String riotUrl = "https://kr.api.riotgames.com";
+
+    private String riotAsiaUrl = "https://asia.api.riotgames.com";
+//    @Value("${riot.api.key}")
+    private String riotApiKey = "RGAPI-18e2a8bf-93c8-4b3f-b86c-8b2a1f0683e1";
+
+
     //소환사 puuid 조회
     public ResponseDto getPuuid(String name,String tag) {
         StringBuilder sb = new StringBuilder("/riot/account/v1/accounts/by-riot-id/" + name + "/" + tag);
 
-        return getRiotResponse(riotUrl,sb.toString());
+
+        return getRiotResponse(riotAsiaUrl,sb.toString());
     }
 
     public ResponseDto getSummonerName(String puuid) {
@@ -36,6 +43,9 @@ public class RiotHttpClient {
         ResponseDto responseDto = null;
         StringBuilder httpURL = new StringBuilder();
         ObjectMapper mapper = new ObjectMapper();
+
+        logger.info("Riot URL: {}", riotUrl);
+        logger.info("Riot API Key: {}", riotApiKey);
 
         try {
             // 서버 + URI + parameter + api key 주소 생성

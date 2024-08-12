@@ -10,7 +10,20 @@
 </head>
 <body style="background-color:white;">
 <div layout:fragment="content">
-    <h1>안녕 나는 <span th:text="${puuid}"></span>야</h1>
+    <div class="container w-75">
+        <div class="row">
+            <div class="summonersImg mx-5 col-1">
+                <img th:src="|https://ddragon.leagueoflegends.com/cdn/14.15.1/img/profileicon/${summoners.profileIconId}.png|"
+                     th:alt="${summoners.profileIconId}" style="width:100px; border-radius:15px;">
+                <p class="bg-dark text-white" style="margin-left:30px; width:40px; border-radius:15px; text-align:center;"><span th:text="${summoners.summonerLevel}"></span></p>
+            </div>
+            <div class="info col-8">
+                <h3><span th:text="${puuidDto.gameName}"></span>&nbsp;<span class="text-body-secondary" th:text="${'#'+puuidDto.tagLine}"></span></h3>
+                <p>랭킹 : </p>
+            </div>
+        </div>
+    </div>
+
 </div>
 <th:block layout:fragment="script"></th:block>
 </body>
