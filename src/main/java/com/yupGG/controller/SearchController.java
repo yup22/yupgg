@@ -1,12 +1,10 @@
 package com.yupGG.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yupGG.config.RiotHttpClient;
-import com.yupGG.dto.PuuidDto;
-import com.yupGG.dto.ResponseDto;
-import com.yupGG.dto.StatusDto;
-import com.yupGG.dto.SummonerDTO;
+import com.yupGG.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/riot")
@@ -30,6 +30,7 @@ public class SearchController {
 
         ResponseDto responseDto = null;
         SummonerDTO summonerDTO = new SummonerDTO();
+
         PuuidDto puuidDto = new PuuidDto();
         StatusDto statusDto = new StatusDto();
         if ("".equals(summoners) == false) {
@@ -50,13 +51,26 @@ public class SearchController {
                 summonerDTO = mapper.readValue(responseDto.getResponseBody(), SummonerDTO.class);
             }
         }
-        System.out.println(summonerDTO.getId());
-        System.out.println(summonerDTO.getProfileIconId());
-        System.out.println(puuidDto.getGameName());
-        System.out.println(summonerDTO.getSummonerLevel());
+        String summonerId = summonerDTO.getId();
+        List<LeagueEntryDto> leagueEntryDto = new ArrayList<>();
+        if (summonerId != null && !summonerId.isEmpty()) {
+            responseDto = new RiotHttpClient().getSummonerRank(summonerId);
+            if (responseDto.isOK()) {
+                ObjectMapper mapper = new ObjectMapper();
+                // 여기서 실제 responseDto의 응답을 사용
+                String jsonInput = responseDto.getResponseBody();
+                leagueEntryDto = mapper.readValue(jsonInput, new TypeReference<List<LeagueEntryDto>>() {});
+            }
+        }
 
+        System.out.println("SummonerID"+summonerDTO.getId());
+        System.out.println("GameName"+puuidDto.getGameName());
+        System.out.println("SummonerLevel"+summonerDTO.getSummonerLevel());
+        System.out.println("랭크"+ leagueEntryDto.getFirst().getRank());
         model.addAttribute("summoners",summonerDTO);
         model.addAttribute("puuidDto",puuidDto);
+        model.addAttribute("leagueEntryDto",leagueEntryDto.getFirst());
+
         return "search/searchPage";
     }
 }

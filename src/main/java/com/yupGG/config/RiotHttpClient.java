@@ -38,6 +38,13 @@ public class RiotHttpClient {
 
         return getRiotResponse(riotUrl, sb.toString());
     }
+
+    //랭크 조회
+    public ResponseDto getSummonerRank(String summonerId) {
+        StringBuilder sb = new StringBuilder("/lol/league/v4/entries/by-summoner/"+summonerId+"?api_key="+riotApiKey);
+
+        return getRiotResponse(riotUrl, sb.toString());
+    }
     // 라이엇 서버연결해서 조회
     public ResponseDto getRiotResponse(String server, String requestURL) {
         ResponseDto responseDto = null;
