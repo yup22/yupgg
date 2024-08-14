@@ -3,19 +3,16 @@ package com.yupGG.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yupGG.config.RiotHttpClient;
+import com.yupGG.service.RiotHttpClient;
 import com.yupGG.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.net.URLEncoder;
-import java.net.http.HttpClient;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +49,7 @@ public class SearchController {
             }
         }
         String summonerId = summonerDTO.getId();
+
         List<LeagueEntryDto> leagueEntryDto = new ArrayList<>();
         if (summonerId != null && !summonerId.isEmpty()) {
             responseDto = new RiotHttpClient().getSummonerRank(summonerId);

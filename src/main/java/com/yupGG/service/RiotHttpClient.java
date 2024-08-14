@@ -1,12 +1,10 @@
-package com.yupGG.config;
+package com.yupGG.service;
 
 import ch.qos.logback.core.util.StringUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yupGG.dto.ResponseDto;
-import com.yupGG.dto.SummonerDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
@@ -41,7 +39,7 @@ public class RiotHttpClient {
 
     //랭크 조회
     public ResponseDto getSummonerRank(String summonerId) {
-        StringBuilder sb = new StringBuilder("/lol/league/v4/entries/by-summoner/"+summonerId+"?api_key="+riotApiKey);
+        StringBuilder sb = new StringBuilder("/lol/league/v4/entries/by-summoner/"+summonerId);
 
         return getRiotResponse(riotUrl, sb.toString());
     }
