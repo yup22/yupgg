@@ -1,10 +1,12 @@
-package com.yupGG.service;
+package com.yupGG.config;
 
 import ch.qos.logback.core.util.StringUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.util.concurrent.RateLimiter;
 import com.yupGG.dto.ResponseDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
@@ -15,34 +17,18 @@ import java.net.http.HttpResponse;
 @Component
 public class RiotHttpClient {
     private static final Logger logger = LoggerFactory.getLogger(RiotHttpClient.class);
-//    @Value("${riot.url}")
-    private String riotUrl = "https://kr.api.riotgames.com";
-
+    @Value("${riot.url}")
+    private String riotUrl;
     private String riotAsiaUrl = "https://asia.api.riotgames.com";
-//    @Value("${riot.api.key}")
-    private String riotApiKey = "RGAPI-18e2a8bf-93c8-4b3f-b86c-8b2a1f0683e1";
+    @Value("${riot.api.key}")
+    private String riotApiKey;
+
+    // 초당 19번 요청허용하는 RateLimiter
+    private final RateLimiter rateLimiter = RateLimiter.create(19.0 / 1.0); // 초당 19번
+    // 2분동안 99번
+    private final RateLimiter twoMinuteRateLimiter = RateLimiter.create(99.0 / 120.0); // 2분에 99번
 
 
-    //소환사 puuid 조회
-    public ResponseDto getPuuid(String name,String tag) {
-        StringBuilder sb = new StringBuilder("/riot/account/v1/accounts/by-riot-id/" + name + "/" + tag);
-
-
-        return getRiotResponse(riotAsiaUrl,sb.toString());
-    }
-
-    public ResponseDto getSummonerName(String puuid) {
-        StringBuilder sb = new StringBuilder("/lol/summoner/v4/summoners/by-puuid/" + puuid);
-
-        return getRiotResponse(riotUrl, sb.toString());
-    }
-
-    //랭크 조회
-    public ResponseDto getSummonerRank(String summonerId) {
-        StringBuilder sb = new StringBuilder("/lol/league/v4/entries/by-summoner/"+summonerId);
-
-        return getRiotResponse(riotUrl, sb.toString());
-    }
     // 라이엇 서버연결해서 조회
     public ResponseDto getRiotResponse(String server, String requestURL) {
         ResponseDto responseDto = null;
@@ -53,6 +39,10 @@ public class RiotHttpClient {
         logger.info("Riot API Key: {}", riotApiKey);
 
         try {
+            //요청전에 RateLimiter로 속도제한 확인
+            rateLimiter.acquire();
+            twoMinuteRateLimiter.acquire();
+
             // 서버 + URI + parameter + api key 주소 생성
             httpURL.append(server)
                     .append(requestURL)
