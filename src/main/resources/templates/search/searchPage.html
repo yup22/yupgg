@@ -61,7 +61,20 @@
             </div>
         </div>
         <section class="my-5">
-            <p>안녕? 나는 전적이 나올 공간이야</p>
+            <table class="table">
+                <tr th:each="match : ${matchDto}"
+                    th:style="'background-color:' + (match.isWinner ? 'lightblue' : 'lightcoral';)">
+                    <td th:text="${match.info.gameType}"></td>
+                    <td th:text="${match.info.gameId}"></td>
+                    <td>
+                        <ul>
+                            <li th:each="participant : ${match.info.participants}"
+                                th:if="${participant.puuid == puuid}"
+                                th:text="${participant.puuid}"></li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
         </section>
     </div>
 

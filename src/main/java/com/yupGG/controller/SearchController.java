@@ -58,25 +58,47 @@ public class SearchController {
         }
 
         List<MatchDto> matchDtos = matchService.getMatch(matchService.getMatchId(puuid));
-
-
-
-        for (MatchDto matchDto : matchDtos) {
-            InfoDto info = matchDto.getInfoDto();
-            for (ParticipantDto participant : info.getParticipants()) {
-                if (puuid.equals(participant.getPuuid())) {
-                    System.out.println("게임 ID: " + info.getGameId());
-                    // 필요한 다른 정보도 출력할 수 있습니다.
-                }
-            }
+//        List<ParticipantDto> gameInfo = new ArrayList<>();
+//        List<InfoDto> infoDtos = new ArrayList<>();
+//        InfoDto infoDto = null;
+//        for (MatchDto matchDto : matchDtos) {
+//            // 먼저 infoDto가 null인지 확인합니다.
+//            infoDto = matchDto.getInfo();
+//
+//            if (infoDto != null) {
+//                // participants가 null이 아닐 경우에만 루프를 돌도록 합니다.
+//                List<ParticipantDto> participants = infoDto.getParticipants();
+//
+//                if (participants != null) {
+//                    for (ParticipantDto participant : participants) {
+//                        if (puuid.equals(participant.getPuuid())) {
+//                            System.out.println("게임 ID: " + infoDto.getGameId());
+//                            infoDtos.add(infoDto);
+//                            gameInfo.add(participant);
+//                            // 필요한 다른 정보도 출력할 수 있습니다.
+//                        }
+//                    }
+//                } else {
+//                    System.out.println("participants 리스트가 null입니다.");
+//                }
+//
+//            } else {
+//                System.out.println("infoDto가 null입니다.");
+//            }
+//        }
+        for (MatchDto match : matchDtos) {
+            match.setWinner(match.getInfo().getParticipants().stream()
+                    .anyMatch(p -> p.getPuuid().equals(puuid) && p.isWin()));
         }
         System.out.println("SummonerID" + summonerDTO.getId());
         System.out.println("GameName" + puuidDto.getGameName());
         System.out.println("SummonerLevel" + summonerDTO.getSummonerLevel());
         System.out.println(leagueEntryDto);
 
+        model.addAttribute("matchDto",matchDtos);
         model.addAttribute("summoners", summonerDTO);
         model.addAttribute("puuidDto", puuidDto);
+        model.addAttribute("puuid",puuid);
 
         if (!leagueEntryDto.isEmpty()) {
             model.addAttribute("leagueEntryDto", leagueEntryDto.get(0));

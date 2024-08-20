@@ -9,11 +9,9 @@ import lombok.Data;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MatchDto {
-
-    InfoDto infoDto;
-    MetadataDto metadataDto;
-
-
+    private InfoDto info;
+    private MetadataDto metadata;
+    private boolean isWinner;
 }
 
 
