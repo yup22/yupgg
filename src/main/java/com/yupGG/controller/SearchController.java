@@ -12,11 +12,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/riot")
@@ -29,16 +32,15 @@ public class SearchController {
         this.matchService = matchService;
     }
 
-    private  final Logger logger = LoggerFactory.getLogger(SearchController.class);
+    private final Logger logger = LoggerFactory.getLogger(SearchController.class);
 
     @GetMapping("/summoners")
-    public String search(@RequestParam(name = "summoners", required = false)String summoners ,
-                         @RequestParam(name = "summonersTag", required = false)String summonersTag, Model model) throws JsonProcessingException {
+    public String search(@RequestParam(name = "summoners", required = false) String summoners,
+                         @RequestParam(name = "summonersTag", required = false) String summonersTag, Model model) throws JsonProcessingException {
 
         PuuidDto puuidDto = new PuuidDto();
         SummonerDTO summonerDTO = new SummonerDTO();
         List<LeagueEntryDto> leagueEntryDto = new ArrayList<>();
-
 
         if (summoners != null && !summoners.isEmpty()) {
             puuidDto = summonerService.getPuuid(summoners, summonersTag);
@@ -58,47 +60,72 @@ public class SearchController {
         }
 
         List<MatchDto> matchDtos = matchService.getMatch(matchService.getMatchId(puuid));
-//        List<ParticipantDto> gameInfo = new ArrayList<>();
-//        List<InfoDto> infoDtos = new ArrayList<>();
-//        InfoDto infoDto = null;
-//        for (MatchDto matchDto : matchDtos) {
-//            // 먼저 infoDto가 null인지 확인합니다.
-//            infoDto = matchDto.getInfo();
-//
-//            if (infoDto != null) {
-//                // participants가 null이 아닐 경우에만 루프를 돌도록 합니다.
-//                List<ParticipantDto> participants = infoDto.getParticipants();
-//
-//                if (participants != null) {
-//                    for (ParticipantDto participant : participants) {
-//                        if (puuid.equals(participant.getPuuid())) {
-//                            System.out.println("게임 ID: " + infoDto.getGameId());
-//                            infoDtos.add(infoDto);
-//                            gameInfo.add(participant);
-//                            // 필요한 다른 정보도 출력할 수 있습니다.
-//                        }
-//                    }
-//                } else {
-//                    System.out.println("participants 리스트가 null입니다.");
-//                }
-//
-//            } else {
-//                System.out.println("infoDto가 null입니다.");
-//            }
-//        }
+        List<ParticipantDto> gameInfo = new ArrayList<>();
+        List<InfoDto> infoDtos = new ArrayList<>();
+        InfoDto infoDto = null;
+        for (MatchDto matchDto : matchDtos) {
+            // 먼저 infoDto가 null인지 확인합니다.
+            infoDto = matchDto.getInfo();
+
+            if (infoDto != null) {
+                // participants가 null이 아닐 경우에만 루프를 돌도록 합니다.
+                List<ParticipantDto> participants = infoDto.getParticipants();
+
+                if (participants != null) {
+                    for (ParticipantDto participant : participants) {
+                        if (puuid.equals(participant.getPuuid())) {
+                            System.out.println("게임 ID: " + infoDto.getGameId());
+                            infoDtos.add(infoDto);
+                            gameInfo.add(participant);
+                            // 필요한 다른 정보도 출력할 수 있습니다.
+                        }
+                    }
+                } else {
+                    System.out.println("participants 리스트가 null입니다.");
+                }
+
+            } else {
+                System.out.println("infoDto가 null입니다.");
+            }
+        }
+
         for (MatchDto match : matchDtos) {
             match.setWinner(match.getInfo().getParticipants().stream()
                     .anyMatch(p -> p.getPuuid().equals(puuid) && p.isWin()));
         }
-        System.out.println("SummonerID" + summonerDTO.getId());
-        System.out.println("GameName" + puuidDto.getGameName());
-        System.out.println("SummonerLevel" + summonerDTO.getSummonerLevel());
+        System.out.println("SummonerID : " + summonerDTO.getId());
+        System.out.println("GameName : " + puuidDto.getGameName());
+        System.out.println("SummonerLevel : " + summonerDTO.getSummonerLevel());
         System.out.println(leagueEntryDto);
 
-        model.addAttribute("matchDto",matchDtos);
+        Map<Integer, String> summonerSpells = new HashMap<>();
+
+        summonerSpells.put(21, "SummonerBarrier");
+        summonerSpells.put(1, "SummonerBoost");
+        summonerSpells.put(2202, "SummonerCherryFlash");
+        summonerSpells.put(2201, "SummonerCherryHold");
+        summonerSpells.put(14, "SummonerDot");
+        summonerSpells.put(2, "SummonerExhaust");
+        summonerSpells.put(4, "SummonerFlash");
+        summonerSpells.put(6, "SummonerHaste");
+        summonerSpells.put(7, "SummonerHeal");
+        summonerSpells.put(13, "SummonerMana");
+        summonerSpells.put(30, "SummonerPoroRecall");
+        summonerSpells.put(31, "SummonerPoroThrow");
+        summonerSpells.put(3, "SummonerSmite");
+        summonerSpells.put(39, "SummonerSnowURFSnowball_Mark");
+        summonerSpells.put(32, "SummonerSnowball");
+        summonerSpells.put(12, "SummonerTeleport");
+        summonerSpells.put(54, "Summoner_UltBookPlaceholder");
+        summonerSpells.put(55, "Summoner_UltBookSmitePlaceholder");
+
+        model.addAttribute("spell", summonerSpells);
+        model.addAttribute("matchDto", matchDtos);
+
         model.addAttribute("summoners", summonerDTO);
         model.addAttribute("puuidDto", puuidDto);
-        model.addAttribute("puuid",puuid);
+        model.addAttribute("puuid", puuid);
+        model.addAttribute("gameInfo", gameInfo);
 
         if (!leagueEntryDto.isEmpty()) {
             model.addAttribute("leagueEntryDto", leagueEntryDto.get(0));
@@ -108,4 +135,6 @@ public class SearchController {
 
         return "search/searchPage";
     }
+
+
 }

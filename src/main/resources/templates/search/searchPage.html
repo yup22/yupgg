@@ -1,84 +1,219 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layouts/layout1}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/layout1}">
+
 <head>
     <th:block layout:fragment="css"></th:block>
     <style>
-        p{
-            color:#fff;
+        p {
+            color: #fff;
         }
 
-        #gangsin{
-        background-color:orange;
-        color:#fff;
-
-        height:50px;
-        }
-        #gangsin:hover{
-        border: 2px solid #ffffff;
-        background-color:#ffa500;
-        color:#ffffff;
+        span {
+            color: #fff;
         }
 
+        #gangsin {
+            background-color: orange;
+            color: #fff;
 
+            height: 50px;
+        }
+
+        #gangsin:hover {
+            border: 2px solid #ffffff;
+            background-color: #ffa500;
+            color: #ffffff;
+        }
+
+        .gameTable div span {
+            font-size: 12px;
+            color: rgb(161, 161, 161);
+        }
+
+        .gameTable div {
+            margin-bottom: -3px;
+        }
+
+        ul,
+        li {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+
+        }
     </style>
+    <script>
+
+    </script>
 </head>
+
 <body>
-<div layout:fragment="content">
-    <div class="container-fluid" style="width:1000px;">
-        <div class="summonerInfo row" style="margin: 0 auto;">
-            <div class="col row">
-                <div class="summonersImg col-3">
-                    <img th:src="|https://ddragon.leagueoflegends.com/cdn/14.15.1/img/profileicon/${summoners.profileIconId}.png|"
-                         th:alt="${summoners.profileIconId}" style="width:100px; border-radius:15px;"
-                         class="z-2 position-absolute">
-                    <p class="text-white z-3 position-absolute"
-                       style="margin-top:85px; background-color:#1f1f1f; margin-left:30px; width:40px; border-radius:15px; text-align:center;">
-                        <span th:text="${summoners.summonerLevel}"></span></p>
+    <div layout:fragment="content">
+        <div class="container-fluid" style="width:1100px;">
+            <div class="summonerInfo row" style="width: 1000px; margin: 0 auto;">
+                <div class="col row">
+                    <div class="summonersImg col-3">
+                        <img th:src="|https://ddragon.leagueoflegends.com/cdn/14.16.1/img/profileicon/${summoners.profileIconId}.png|"
+                            th:alt="${summoners.profileIconId}" style="width:100px; border-radius:15px;"
+                            class="z-2 position-absolute">
+                        <p class="text-white z-3 position-absolute"
+                            style="margin-top:85px; background-color:#1f1f1f; margin-left:30px; width:40px; border-radius:15px; text-align:center;">
+                            <span th:text="${summoners.summonerLevel}"></span>
+                        </p>
+                    </div>
+                    <div class="info col-8">
+                        <p class="fs-3 fw-bold"><span th:text="${puuidDto.gameName}"></span>&nbsp;<span
+                                class="text-white-50" th:text="${'#'+puuidDto.tagLine}"></span></p>
+                        <button class="btn btn-dark" id="gangsin">전적 갱신</button>
+                    </div>
                 </div>
-                <div class="info col-8">
-                    <p class="fs-3 fw-bold"><span th:text="${puuidDto.gameName}"></span>&nbsp;<span
-                            class="text-white-50" th:text="${'#'+puuidDto.tagLine}"></span></p>
-                    <button class="btn btn-dark" id="gangsin">전적 갱신</button>
-                </div>
-            </div>
-            <div class="col row" th:if="${leagueEntryDto != null}">
-                <div class="tierImg col-3" >
-                    <img th:src="@{'/images/'+${leagueEntryDto.tier}+'.png'}" th:alt="${leagueEntryDto.tier}"
-                         style="width:100px;">
-                </div>
-                <div class="tierInfo col-8">
-                    <p class="fs-4 fw-bold" style="margin-bottom:-3px;"
-                       th:text="${leagueEntryDto.tier+' '+leagueEntryDto.rank}"><br></p>
-                    <p class="fs-5" style="margin-bottom:-3px;" th:text="${leagueEntryDto.leaguePoints+' LP'}"></p>
-                    <p class="fs-6" th:text="${'승률 ' + (leagueEntryDto.wins * 100) / (leagueEntryDto.wins + leagueEntryDto.losses) + '% ('
+                <div class="col row" th:if="${leagueEntryDto != null}">
+                    <div class="tierImg col-3">
+                        <img th:src="@{'/images/'+${leagueEntryDto.tier}+'.png'}" th:alt="${leagueEntryDto.tier}"
+                            style="width:100px;">
+                    </div>
+                    <div class="tierInfo col-8">
+                        <p class="fs-4 fw-bold" style="margin-bottom:-3px;"
+                            th:text="${leagueEntryDto.tier+' '+leagueEntryDto.rank}"><br></p>
+                        <p class="fs-5" style="margin-bottom:-3px;" th:text="${leagueEntryDto.leaguePoints+' LP'}"></p>
+                        <p class="fs-6" th:text="${'승률 ' + (leagueEntryDto.wins * 100) / (leagueEntryDto.wins + leagueEntryDto.losses) + '% ('
                     + leagueEntryDto.wins + '승 ' + leagueEntryDto.losses + '패)'}"></p>
+                    </div>
+                </div>
+                <div class="col row" th:if="${leagueEntryDto == null}">
+
                 </div>
             </div>
-            <div class="col row" th:if="${leagueEntryDto == null}">
+            <div class="gameInfo my-5">
+                <div class="inner row my-2" th:if="${matchDto == null}">
+                    <p>게임정보가 없습니다. 전적갱신을 해주세요.</p>
+                </div>
+                <div class="inner row my-2" th:each="match : ${matchDto}">
+                    <div class="gameTable col-8 rounded row p-1 pb-2" style="height:120px;"
+                        th:style="'background-color:' + (${gameInfo[matchStat.index].win ? 'rgb(1, 33, 44)' : 'rgb(53, 9, 9)'})">
+                        <div class="head col-2 px-4">
+                            <div class="headGroup">
+                                <div class="gametype">
+                                    <span class="fw-bolder" th:text="${match.info.queueId == 420 ? '솔랭' : '일반'}"></span>
+                                </div>
+                                <div class="timeStamp">
+                                    <span th:text="${#dates.format(match.info.gameEndTimestamp, 'MM/dd')}"></span>
+                                </div>
+                            </div>
+                            <div style="margin-top:-12px; margin-bottom: -12px;">
+                                <hr class="w-50" style="color:white;">
+                            </div>
+                            <div class="headGroup">
+                                <span class="fw-bolder" th:text="${gameInfo[matchStat.index].win ? '승리' : '패배'}"></span>
+                            </div>
+                            <div class="timeStamp">
+                                <span
+                                    th:text="${#numbers.formatInteger(match.info.gameDuration / 60, 0)} + '분 ' + ${#numbers.formatInteger(match.info.gameDuration % 60, 2)}+ '초'"></span>
+                            </div>
+                        </div>
+                        <div class="main col-8 row">
+
+                            <div class="infoImg col-4 pt-2">
+                                <div class="champImg" style="display:inline; float:left;">
+                                    <img th:src="'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/champion/'+${gameInfo[matchStat.index].championName}+'.png'"
+                                        alt="champImg" class="rounded-circle mt-1" style="width:80px; ">
+                                </div>
+                                <div class="spellImg">
+                                    <div class="spell my-1">
+                                        <img th:src="'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/spell/' + ${spell[gameInfo[matchStat.index].summoner1Id]} + '.png'"
+                                             alt="spell" style="width:35px;" class="rounded">
+                                    </div>
+                                    <div class="spell">
+                                        <img th:src="'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/spell/' + ${spell[gameInfo[matchStat.index].summoner2Id]} + '.png'"
+                                             alt="spell" style="width:35px;" class="rounded">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="kda col-3 pt-4 px-1">
+                                <div>
+                                    <h5 style="text-align: center;"><span style="color: white;" class="fw-bold fs-6"
+                                            th:text="${gameInfo[matchStat.index].kills}"></span>
+                                        / <span class="fs-6 fw-bold" style="color: rgb(146, 32, 32);"
+                                            th:text="${gameInfo[matchStat.index].deaths}"></span> / <span
+                                            th:text="${gameInfo[matchStat.index].assists}" style="color: white;"
+                                            class="fs-6 fw-bold"></span></h5>
+                                    <p style="color: #6e6e6e; text-align: center;"
+                                        th:text="${gameInfo[matchStat.index].deaths > 0 ? #numbers.formatDecimal(((gameInfo[matchStat.index].kills*1.0*1.0 + gameInfo[matchStat.index].assists) / gameInfo[matchStat.index].deaths),1,2) + ' 평점' : 'perfect'}">
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="ItemInfo col-5 pt-2">
+                                <div class="itemImgBox" style="display: inline; float:left;">
+                                    <div class="itemImg my-1">
+                                        <img th:if="${gameInfo[matchStat.index].item0 != 0}"
+                                             th:src="'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/item/' + ${gameInfo[matchStat.index].item0} + '.png'"
+                                             th:alt="${gameInfo[matchStat.index].item0}" style="width:35px;"
+                                             class="rounded">
+                                        <img th:if="${gameInfo[matchStat.index].item1 != 0}"
+                                             th:src="'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/item/' + ${gameInfo[matchStat.index].item1} + '.png'"
+                                             th:alt="${gameInfo[matchStat.index].item1}" style="width:35px;"
+                                             class="rounded">
+                                        <img th:if="${gameInfo[matchStat.index].item2 != 0}"
+                                             th:src="'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/item/' + ${gameInfo[matchStat.index].item2} + '.png'"
+                                             th:alt="${gameInfo[matchStat.index].item2}" style="width:35px;"
+                                             class="rounded">
+                                    </div>
+                                    <div class="itemImg my-1">
+                                        <img th:if="${gameInfo[matchStat.index].item3 != 0}"
+                                             th:src="'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/item/' + ${gameInfo[matchStat.index].item3} + '.png'"
+                                             th:alt="${gameInfo[matchStat.index].item3}" style="width:35px;"
+                                             class="rounded">
+                                        <img th:if="${gameInfo[matchStat.index].item4 != 0}"
+                                             th:src="'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/item/' + ${gameInfo[matchStat.index].item4} + '.png'"
+                                             th:alt="${gameInfo[matchStat.index].item4}" style="width:35px;"
+                                             class="rounded">
+                                        <img th:if="${gameInfo[matchStat.index].item5 != 0}"
+                                             th:src="'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/item/' + ${gameInfo[matchStat.index].item5} + '.png'"
+                                             th:alt="${gameInfo[matchStat.index].item5}" style="width:35px;"
+                                             class="rounded">
+                                    </div>
+                                </div>
+                                <div class="itemImg my-4" style="float:right; margin-right: 10px;">
+                                    <img th:if="${gameInfo[matchStat.index].item6 != null}"
+                                         th:src="'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/item/' + ${gameInfo[matchStat.index].item6} + '.png'"
+                                         th:alt="${gameInfo[matchStat.index].item6}"
+                                         style="width:35px;"
+                                         class="rounded">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="foot col-2 pt-2">
+                            <ul>
+                                <li>
+                                    <span th:text="'시야점수 '+${gameInfo[matchStat.index].visionScore}"></span>
+                                </li>
+                                <li>
+                                    <span th:text="'CS '+${gameInfo[matchStat.index].totalMinionsKilled}"></span>
+                                </li>
+                                <li>
+                                    <span   th:if="${leagueEntryDto != null}"
+                                            th:text="${leagueEntryDto.tier}"></span>
+                                    <span   th:if="${leagueEntryDto == null}">unRanked</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="border border-light col-3">
+
+                    </div>
+                </div>
+
 
             </div>
-        </div>
-        <section class="my-5">
-            <table class="table">
-                <tr th:each="match : ${matchDto}"
-                    th:style="'background-color:' + (match.isWinner ? 'lightblue' : 'lightcoral';)">
-                    <td th:text="${match.info.gameType}"></td>
-                    <td th:text="${match.info.gameId}"></td>
-                    <td>
-                        <ul>
-                            <li th:each="participant : ${match.info.participants}"
-                                th:if="${participant.puuid == puuid}"
-                                th:text="${participant.puuid}"></li>
-                        </ul>
-                    </td>
-                </tr>
-            </table>
-        </section>
-    </div>
 
-</div>
-<th:block layout:fragment="script"></th:block>
+
+        </div>
+
+    </div>
+    <th:block layout:fragment="script"></th:block>
 </body>
+
 </html>

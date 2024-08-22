@@ -6,10 +6,10 @@ import lombok.Data;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ParticipantDto {
-    // 노란색 교차된 검 (All-In Ping)
+    // 올인핑
     private int allInPings;
 
-    // 녹색 깃발 (Assist Me Ping)
+    // 도움핑
     private int assistMePings;
 
     // 어시스트 수
@@ -199,39 +199,6 @@ public class ParticipantDto {
     // 참가자 ID
     private int participantId;
 
-    // 플레이어 점수 0
-    private int playerScore0;
-
-    // 플레이어 점수 1
-    private int playerScore1;
-
-    // 플레이어 점수 2
-    private int playerScore2;
-
-    // 플레이어 점수 3
-    private int playerScore3;
-
-    // 플레이어 점수 4
-    private int playerScore4;
-
-    // 플레이어 점수 5
-    private int playerScore5;
-
-    // 플레이어 점수 6
-    private int playerScore6;
-
-    // 플레이어 점수 7
-    private int playerScore7;
-
-    // 플레이어 점수 8
-    private int playerScore8;
-
-    // 플레이어 점수 9
-    private int playerScore9;
-
-    // 플레이어 점수 10
-    private int playerScore10;
-
     // 펜타 킬 수
     private int pentaKills;
 
@@ -246,21 +213,6 @@ public class ParticipantDto {
 
     // 플레이어 배치 순위
     private int placement;
-
-    // 플레이어 증강 1
-    private int playerAugment1;
-
-    // 플레이어 증강 2
-    private int playerAugment2;
-
-    // 플레이어 증강 3
-    private int playerAugment3;
-
-    // 플레이어 증강 4
-    private int playerAugment4;
-
-    // 플레이어 서브팀 ID
-    private int playerSubteamId;
 
     // 녹색 미니언 (Push Ping)
     private int pushPings;
