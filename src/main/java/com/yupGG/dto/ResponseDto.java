@@ -21,6 +21,10 @@ public class ResponseDto {
         this.responseBody = message;
     }
 
+    public ResponseDto() {
+
+    }
+
     //응답 성공여부
     public boolean isOK(){
         if (this.status != null) {

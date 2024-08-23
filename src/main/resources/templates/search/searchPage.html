@@ -16,13 +16,54 @@
         #gangsin {
             background-color: orange;
             color: #fff;
-
             height: 50px;
+            position: relative;
+            display: flex;
+            width: 96px;
+            align-items: center;
+    justify-content: center;
+        }
+
+        .button-text {
+            display: inline;
+        }
+
+        /* 로딩 스피너 스타일 */
+        .spinner {
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-left: 3px solid #333;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            animation: spin 1s linear infinite;
+            display: none;
+            /* 기본적으로 숨겨짐 */
+        }
+
+        /* 스피너 애니메이션 */
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+
+        .button-disabled {
+            background-color: gray;
+            /* 회색 배경 */
+            color: white;
+            /* 흰색 글자 */
+            cursor: not-allowed;
+            /* 클릭 불가 커서 */
         }
 
         #gangsin:hover {
-            border: 2px solid #ffffff;
-            background-color: #ffa500;
+            background-color: #f8cb79;
             color: #ffffff;
         }
 
@@ -44,7 +85,50 @@
         }
     </style>
     <script>
+        $(document).ready(function () {
+            $('#gangsin').click(function () {
+                var $button = $(this); // 버튼 참조
+                var $spinner = $button.find('.spinner');
+                var $buttonText = $button.find('.button-text');
+                // 페이지에서 값 추출
+                const gameName = $('#gameName').text().replace(/\s+/g, '');
+                const tagLine = '[[${puuidDto.tagLine}]]';
 
+                // 버튼을 비활성화하고 스타일을 변경
+                $button.prop('disabled', true).addClass('button-disabled');
+                $spinner.show();
+                $buttonText.hide();
+
+                $.ajax({
+                    url: '/riot/gangsin', // 요청을 보낼 URL
+                    type: 'GET', // 요청 방식
+                    data: { gameName: gameName, tagLine: tagLine }, // URL 쿼리 파라미터로 데이터 전송
+                    success: function (response) {
+                        // 서버로부터 응답이 성공적으로 돌아왔을 때 실행되는 코드
+                        console.log('전적 갱신 성공:', response, gameName, tagLine);
+                        alert('전적 갱신이 완료되었습니다.');
+
+
+                        $('#match-container').html(response);
+
+                        // 버튼을 다시 활성화하고 원래 스타일로 복원
+                        $button.prop('disabled', false).removeClass('button-disabled');
+                        $spinner.hide();
+                        $buttonText.show();
+                    },
+                    error: function (xhr, status, error) {
+                        // 요청이 실패했을 때 실행되는 코드
+                        console.error('전적 갱신 실패:', error);
+                        alert('전적 갱신에 실패했습니다. 다시 시도해 주세요.');
+
+                        // 버튼을 다시 활성화하고 원래 스타일로 복원
+                        $button.prop('disabled', false).removeClass('button-disabled');
+                        $spinner.hide();
+                        $buttonText.show();
+                    }
+                });
+            });
+        });
     </script>
 </head>
 
@@ -63,9 +147,13 @@
                         </p>
                     </div>
                     <div class="info col-8">
-                        <p class="fs-3 fw-bold"><span th:text="${puuidDto.gameName}"></span>&nbsp;<span
-                                class="text-white-50" th:text="${'#'+puuidDto.tagLine}"></span></p>
-                        <button class="btn btn-dark" id="gangsin">전적 갱신</button>
+                        <p class="fs-3 fw-bold"><span id="gameName" th:text="${puuidDto.gameName}"></span>&nbsp;
+                            <span id="tagLine" class="text-white-50" th:text="'#'+${puuidDto.tagLine}"></span>
+                        </p>
+                        <button class="btn btn-dark" id="gangsin">
+                            <span class="button-text">전적 갱신</span>
+                            <span class="spinner" style="display: none;"></span>
+                        </button>
                     </div>
                 </div>
                 <div class="col row" th:if="${leagueEntryDto != null}">
@@ -85,7 +173,7 @@
 
                 </div>
             </div>
-            <div class="gameInfo my-5">
+            <div class="gameInfo my-5" id="match-container">
                 <div class="inner row my-2" th:if="${matchDto == null}">
                     <p>게임정보가 없습니다. 전적갱신을 해주세요.</p>
                 </div>
@@ -122,11 +210,11 @@
                                 <div class="spellImg">
                                     <div class="spell my-1">
                                         <img th:src="'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/spell/' + ${spell[gameInfo[matchStat.index].summoner1Id]} + '.png'"
-                                             alt="spell" style="width:35px;" class="rounded">
+                                            alt="spell" style="width:35px;" class="rounded">
                                     </div>
                                     <div class="spell">
                                         <img th:src="'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/spell/' + ${spell[gameInfo[matchStat.index].summoner2Id]} + '.png'"
-                                             alt="spell" style="width:35px;" class="rounded">
+                                            alt="spell" style="width:35px;" class="rounded">
                                     </div>
                                 </div>
                             </div>
@@ -149,39 +237,37 @@
                                 <div class="itemImgBox" style="display: inline; float:left;">
                                     <div class="itemImg my-1">
                                         <img th:if="${gameInfo[matchStat.index].item0 != 0}"
-                                             th:src="'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/item/' + ${gameInfo[matchStat.index].item0} + '.png'"
-                                             th:alt="${gameInfo[matchStat.index].item0}" style="width:35px;"
-                                             class="rounded">
+                                            th:src="'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/item/' + ${gameInfo[matchStat.index].item0} + '.png'"
+                                            th:alt="${gameInfo[matchStat.index].item0}" style="width:35px;"
+                                            class="rounded">
                                         <img th:if="${gameInfo[matchStat.index].item1 != 0}"
-                                             th:src="'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/item/' + ${gameInfo[matchStat.index].item1} + '.png'"
-                                             th:alt="${gameInfo[matchStat.index].item1}" style="width:35px;"
-                                             class="rounded">
+                                            th:src="'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/item/' + ${gameInfo[matchStat.index].item1} + '.png'"
+                                            th:alt="${gameInfo[matchStat.index].item1}" style="width:35px;"
+                                            class="rounded">
                                         <img th:if="${gameInfo[matchStat.index].item2 != 0}"
-                                             th:src="'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/item/' + ${gameInfo[matchStat.index].item2} + '.png'"
-                                             th:alt="${gameInfo[matchStat.index].item2}" style="width:35px;"
-                                             class="rounded">
+                                            th:src="'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/item/' + ${gameInfo[matchStat.index].item2} + '.png'"
+                                            th:alt="${gameInfo[matchStat.index].item2}" style="width:35px;"
+                                            class="rounded">
                                     </div>
                                     <div class="itemImg my-1">
                                         <img th:if="${gameInfo[matchStat.index].item3 != 0}"
-                                             th:src="'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/item/' + ${gameInfo[matchStat.index].item3} + '.png'"
-                                             th:alt="${gameInfo[matchStat.index].item3}" style="width:35px;"
-                                             class="rounded">
+                                            th:src="'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/item/' + ${gameInfo[matchStat.index].item3} + '.png'"
+                                            th:alt="${gameInfo[matchStat.index].item3}" style="width:35px;"
+                                            class="rounded">
                                         <img th:if="${gameInfo[matchStat.index].item4 != 0}"
-                                             th:src="'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/item/' + ${gameInfo[matchStat.index].item4} + '.png'"
-                                             th:alt="${gameInfo[matchStat.index].item4}" style="width:35px;"
-                                             class="rounded">
+                                            th:src="'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/item/' + ${gameInfo[matchStat.index].item4} + '.png'"
+                                            th:alt="${gameInfo[matchStat.index].item4}" style="width:35px;"
+                                            class="rounded">
                                         <img th:if="${gameInfo[matchStat.index].item5 != 0}"
-                                             th:src="'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/item/' + ${gameInfo[matchStat.index].item5} + '.png'"
-                                             th:alt="${gameInfo[matchStat.index].item5}" style="width:35px;"
-                                             class="rounded">
+                                            th:src="'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/item/' + ${gameInfo[matchStat.index].item5} + '.png'"
+                                            th:alt="${gameInfo[matchStat.index].item5}" style="width:35px;"
+                                            class="rounded">
                                     </div>
                                 </div>
                                 <div class="itemImg my-4" style="float:right; margin-right: 10px;">
                                     <img th:if="${gameInfo[matchStat.index].item6 != null}"
-                                         th:src="'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/item/' + ${gameInfo[matchStat.index].item6} + '.png'"
-                                         th:alt="${gameInfo[matchStat.index].item6}"
-                                         style="width:35px;"
-                                         class="rounded">
+                                        th:src="'https://ddragon.leagueoflegends.com/cdn/14.16.1/img/item/' + ${gameInfo[matchStat.index].item6} + '.png'"
+                                        th:alt="${gameInfo[matchStat.index].item6}" style="width:35px;" class="rounded">
                                 </div>
                             </div>
                         </div>
@@ -194,9 +280,8 @@
                                     <span th:text="'CS '+${gameInfo[matchStat.index].totalMinionsKilled}"></span>
                                 </li>
                                 <li>
-                                    <span   th:if="${leagueEntryDto != null}"
-                                            th:text="${leagueEntryDto.tier}"></span>
-                                    <span   th:if="${leagueEntryDto == null}">unRanked</span>
+                                    <span th:if="${leagueEntryDto != null}" th:text="${leagueEntryDto.tier}"></span>
+                                    <span th:if="${leagueEntryDto == null}">unRanked</span>
                                 </li>
                             </ul>
                         </div>
@@ -205,8 +290,6 @@
 
                     </div>
                 </div>
-
-
             </div>
 
 

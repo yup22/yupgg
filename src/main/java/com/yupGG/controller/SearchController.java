@@ -9,12 +9,11 @@ import com.yupGG.service.MatchService;
 import com.yupGG.service.SummonerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,10 +58,35 @@ public class SearchController {
             leagueEntryDto = summonerService.getSummonerRank(summonerId);
         }
 
+        model.addAttribute("summoners", summonerDTO);
+        model.addAttribute("puuidDto", puuidDto);
+        model.addAttribute("puuid", puuid);
+
+        if (!leagueEntryDto.isEmpty()) {
+            model.addAttribute("leagueEntryDto", leagueEntryDto.get(0));
+        } else {
+            model.addAttribute("leagueEntryDto", null);
+        }
+
+        return "search/searchPage";
+    }
+
+    @GetMapping("/gangsin")
+    public String gangsin(@RequestParam("gameName") String gameName,
+                          @RequestParam("tagLine") String tagLine, Model model) throws JsonProcessingException {
+
+        PuuidDto puuidDto = new PuuidDto();
+
+        if (gameName != null && !gameName.isEmpty()) {
+            puuidDto = summonerService.getPuuid(gameName, tagLine);
+        }
+        String puuid = puuidDto.getPuuid();
+
         List<MatchDto> matchDtos = matchService.getMatch(matchService.getMatchId(puuid));
         List<ParticipantDto> gameInfo = new ArrayList<>();
         List<InfoDto> infoDtos = new ArrayList<>();
         InfoDto infoDto = null;
+
         for (MatchDto matchDto : matchDtos) {
             // 먼저 infoDto가 null인지 확인합니다.
             infoDto = matchDto.getInfo();
@@ -93,10 +117,6 @@ public class SearchController {
             match.setWinner(match.getInfo().getParticipants().stream()
                     .anyMatch(p -> p.getPuuid().equals(puuid) && p.isWin()));
         }
-        System.out.println("SummonerID : " + summonerDTO.getId());
-        System.out.println("GameName : " + puuidDto.getGameName());
-        System.out.println("SummonerLevel : " + summonerDTO.getSummonerLevel());
-        System.out.println(leagueEntryDto);
 
         Map<Integer, String> summonerSpells = new HashMap<>();
 
@@ -119,13 +139,11 @@ public class SearchController {
         summonerSpells.put(54, "Summoner_UltBookPlaceholder");
         summonerSpells.put(55, "Summoner_UltBookSmitePlaceholder");
 
-        model.addAttribute("spell", summonerSpells);
-        model.addAttribute("matchDto", matchDtos);
-
-        model.addAttribute("summoners", summonerDTO);
-        model.addAttribute("puuidDto", puuidDto);
-        model.addAttribute("puuid", puuid);
-        model.addAttribute("gameInfo", gameInfo);
+        String summonerId = gameInfo.getFirst().getSummonerId();
+        List<LeagueEntryDto> leagueEntryDto = null;
+        if (summonerId != null && !summonerId.isEmpty()) {
+            leagueEntryDto = summonerService.getSummonerRank(summonerId);
+        }
 
         if (!leagueEntryDto.isEmpty()) {
             model.addAttribute("leagueEntryDto", leagueEntryDto.get(0));
@@ -133,8 +151,11 @@ public class SearchController {
             model.addAttribute("leagueEntryDto", null);
         }
 
-        return "search/searchPage";
+        model.addAttribute("spell", summonerSpells);
+        model.addAttribute("matchDto", matchDtos);
+        model.addAttribute("gameInfo", gameInfo);
+        // 필요한 다른 데이터를 모델에 추가
+
+        return "search/searchPage :: #match-container"; // 특정 섹션만 반환
     }
-
-
 }
