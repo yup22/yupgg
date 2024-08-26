@@ -14,9 +14,8 @@
                     <a class="link-secondary text-white-50 fw-bolder align-middle" href="/admin/items" style="text-decoration:none;">아이템</a>
                 </div>
                 <div class="col-4 d-flex justify-content-end align-items-center">
-                    <a class="link-secondary text-white-50 fw-bolder align-middle" aria-current="page" href="/members/login" style="text-decoration: none; margin-right:60px;" sec:authorize="isAnonymous()">
-                         로그인
-                    </a>
+                    <a class="link-secondary text-white-50 fw-bolder align-middle" style="text-decoration: none; margin-right:60px;" aria-current="page" href="/members/login" sec:authorize="isAnonymous()">로그인</a>
+                    <a class="link-secondary text-white-50 fw-bolder align-middle" style="text-decoration: none; margin-right:60px;" aria-current="page" href="/members/logout" sec:authorize="isAuthenticated()" >로그아웃</a>
                 </div>
             </div>
         </header>
