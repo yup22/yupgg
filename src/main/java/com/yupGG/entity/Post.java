@@ -21,6 +21,7 @@ public class Post {
     private String author;
     private int viewCount;
     private int likeCount;
+    private int commentCount;
 
     @Column(name = "created_date")
     private LocalDateTime createdDate;

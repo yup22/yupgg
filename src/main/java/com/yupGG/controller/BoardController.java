@@ -49,11 +49,16 @@ public class BoardController {
 
     @PostMapping("/save")
     public String save(@RequestParam(name = "title") String title,
-                       @RequestParam(name = "content") String content,
-                       @RequestParam(name = "author") String author) {
+                       @RequestParam(name = "header") String header,
+                       @RequestParam(name = "content") String content) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUser = authentication.getName();
+
         PostDto postDto = new PostDto();
         postDto.setTitle(title);
-        postDto.setAuthor(author);
+        postDto.setHeader(header);
+        postDto.setAuthor(currentUser);
         postDto.setContent(content);
 
         String formattedDate = LocalDateTime.now().format(FORMATTER);
@@ -66,9 +71,13 @@ public class BoardController {
     }
 
     @GetMapping("/userBoard/{id}")
-    public String userBoard() {
-
-        return "board/userBoard";
+    public String userBoard(@PathVariable("id") Long id, Model model) {
+        return postService.getPostById(id)
+                .map(post -> {
+                    model.addAttribute("post", post);
+                    return "/board/userBoard"; // Thymeleaf 템플릿 파일 이름
+                })
+                .orElse("error"); // 에러 페이지 또는 다른 페이지로 리다이렉트
     }
     @PostMapping("/{id}/like")
     public void likePost(@PathVariable Long id) {

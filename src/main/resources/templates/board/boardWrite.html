@@ -31,12 +31,20 @@
 
     </style>
     <script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                // 페이지 로드 후 실행되는 코드
-                var authorValue = document.getElementById('authorValue').textContent.trim();
-                document.getElementById('authorField').value = authorValue;
-            });
+        document.addEventListener('DOMContentLoaded', function() {
+    var dropdownButton = document.getElementById('dropdownButton');
+    var dropdownItems = document.querySelectorAll('.dropdown-item');
+    var hiddenHeader = document.getElementById('header');
+
+    dropdownItems.forEach(item => {
+        item.addEventListener('click', function(event) {
+            event.preventDefault(); // 링크의 기본 동작 방지
+            var selectedValue = this.getAttribute('data-value');
+            dropdownButton.innerHTML = `&nbsp;${selectedValue}&nbsp;`; // 버튼 텍스트 업데이트
+            hiddenHeader.value = selectedValue; // 숨겨진 입력 필드 업데이트
+        });
+    });
+});
     </script>
     </script>
 </head>
@@ -50,6 +58,7 @@
             </h3>
         </div>
         <form id="postForm" action="/board/save" method="POST">
+            <input type="hidden" name="header" id="header">
             <input type="hidden" name="author" id="author" th:text="${user}">
             <input type="hidden" name="_csrf" th:value="${_csrf.token}">
             <div class="boardTable p-3" style="width:1000px;">
@@ -61,14 +70,14 @@
                 </div>
                 <div class="row" style="height:40px;">
                     <div class="btn-group col-1 ms-2 mt-1">
-                        <button id="dropdownButton" type="button" class="btn btn-dark dropdown-toggle"
+                        <button id="dropdownButton" name="header" type="button" class="btn btn-dark dropdown-toggle"
                                 data-bs-toggle="dropdown" aria-expanded="false">
                             &nbsp;일반&nbsp;
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">&nbsp;일반&nbsp;</a></li>
-                            <li><a class="dropdown-item" href="#">&nbsp;질문&nbsp;</a></li>
-                            <li><a class="dropdown-item" href="#">&nbsp;정보&nbsp;</a></li>
+                            <li><a class="dropdown-item" href="#" data-value="일반">&nbsp;일반&nbsp;</a></li>
+                            <li><a class="dropdown-item" href="#" data-value="질문">&nbsp;질문&nbsp;</a></li>
+                            <li><a class="dropdown-item" href="#" data-value="정보">&nbsp;정보&nbsp;</a></li>
                         </ul>
                     </div>
                     <input type="text"

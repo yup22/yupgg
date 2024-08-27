@@ -6,10 +6,13 @@ import com.yupGG.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Service
 public class PostService {
@@ -42,8 +45,8 @@ public class PostService {
 
     public Page<Post> findPosts(int page) {
         // 페이지 번호(page)는 0부터 시작하며, 페이지 크기는 10으로 설정
-        PageRequest pageRequest = PageRequest.of(page, 10);
-        return postRepository.findAll(pageRequest);
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(Sort.Direction.DESC, "createdDate"));
+        return postRepository.findAll(pageable);
     }
 
     public void savePost(PostDto postDto) {
@@ -53,7 +56,13 @@ public class PostService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime createdDate = LocalDateTime.parse(postDto.getCreatedDate(), formatter);
         post.setCreatedDate(createdDate);
+        post.setHeader(postDto.getHeader());
+        post.setAuthor(postDto.getAuthor());
 
         postRepository.save(post);
+    }
+
+    public Optional<Post> getPostById(Long id) {
+        return postRepository.findById(id);
     }
 }
