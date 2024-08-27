@@ -58,7 +58,7 @@
             </h3>
         </div>
         <form id="postForm" action="/board/save" method="POST">
-            <input type="hidden" name="header" id="header">
+            <input type="hidden" name="header" id="header" value="일반">
             <input type="hidden" name="author" id="author" th:text="${user}">
             <input type="hidden" name="_csrf" th:value="${_csrf.token}">
             <div class="boardTable p-3" style="width:1000px;">
