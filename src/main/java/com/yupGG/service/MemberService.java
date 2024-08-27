@@ -40,7 +40,7 @@ public class MemberService implements UserDetailsService {
         if(member == null){
             throw new UsernameNotFoundException(email);
         }
-        return User.builder().username(member.getEmail())
+        return User.builder().username(member.getName())
                 .password(member.getPassword())
                 .roles(member.getRole().toString())
                 .build();

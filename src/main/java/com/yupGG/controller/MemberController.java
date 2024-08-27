@@ -45,7 +45,7 @@ public class MemberController {
         }
         if(!confirmCheck){
             model.addAttribute("errorMessage","이메일 인증이 필요합니다.");
-            return "member/memberForm";
+            return "members/memberForm";
         }
 
         if (!memberFormDto.getPassword().equals(memberFormDto.getPasswordConfirm())) {

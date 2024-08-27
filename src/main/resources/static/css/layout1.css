@@ -26,3 +26,11 @@
    background-color : #1f1f1f;
 
    }
+   .menu:hover{
+               color:#fff !important;
+           }
+           .menu {
+               text-decoration: none;
+               margin-right: 60px;
+               color: #888; /* 기본 색상 설정 */
+           }

@@ -45,7 +45,9 @@ dependencies {
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 
 }
-
+tasks.withType(JavaCompile) {
+	options.compilerArgs += ['-parameters']
+}
 tasks.named('test') {
 	useJUnitPlatform()
 }

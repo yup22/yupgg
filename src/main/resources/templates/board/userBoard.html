@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<head>
+    <th:block layout:fragment="css"></th:block>
+    <style>
+
+        p{
+        color:#fff;
+        }
+        .body p{
+            font-size:13px;
+        }
+        .boardBtn{
+            float:right;
+        }
+        button.btn-dark {
+
+            background-color : #1f1f1f;
+            color: #fff;
+            height: 30px;
+            line-height:30px;
+            position: relative;
+            display: flex;
+            width: 120px;
+            align-items: center;
+    justify-content: center;
+    font-size:15px;
+        }
+
+        button.btn-primary:hover {
+            background-color: #bbb;
+        }
+        .comment p{
+            font-size: 13px;
+        }
+    </style>
+    <script>
+
+    </script>
+</head>
+
+<body>
+<div layout:fragment="content">
+    <div class="container-fluid pb-3" style="width:1100px;">
+
+        <div class="boardTable p-3" style="width:1000px;">
+            <div class="textName mx-2" style="margin-bottom:-15px;">
+                <p style="margin-bottom:-5px;">[일반] 글 제목 ㅋㅋ</p>
+                <div class="row" style="">
+                    <p style="line-height:40px; font-size:13px;" class="col-1 ">구난병</p>
+                    <p style="line-height:40px; font-size:13px;" class="col-2 px-1">2024-08-27 15:20</p>
+                    <div class="col-6">&nbsp;</div>
+                    <p style="line-height:40px; font-size:13px;" class="col-1">조회 133</p>
+                    <p style="line-height:40px; font-size:13px;" class="col-1">추천 123</p>
+                    <p style="line-height:40px; font-size:13px;" class="col-1">댓글 1</p>
+                </div>
+            </div>
+            <hr style="color:#fff;">
+            <div class="textContent my-5 py-3">
+                <p>밥은 먹었냐?</p>
+            </div>
+            <div class="good d-flex" style="justify-content:center;">
+                <button class="btn btn-primary rounded-5 " onclick="#" style="width:90px; justify-content:center;">추천
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-hand-thumbs-up" viewBox="0 0 16 16">
+                        <path d="M8.864.046C7.908-.193 7.02.53 6.956 1.466c-.072 1.051-.23 2.016-.428 2.59-.125.36-.479 1.013-1.04 1.639-.557.623-1.282 1.178-2.131 1.41C2.685 7.288 2 7.87 2 8.72v4.001c0 .845.682 1.464 1.448 1.545 1.07.114 1.564.415 2.068.723l.048.03c.272.165.578.348.97.484.397.136.861.217 1.466.217h3.5c.937 0 1.599-.477 1.934-1.064a1.86 1.86 0 0 0 .254-.912c0-.152-.023-.312-.077-.464.201-.263.38-.578.488-.901.11-.33.172-.762.004-1.149.069-.13.12-.269.159-.403.077-.27.113-.568.113-.857 0-.288-.036-.585-.113-.856a2 2 0 0 0-.138-.362 1.9 1.9 0 0 0 .234-1.734c-.206-.592-.682-1.1-1.2-1.272-.847-.282-1.803-.276-2.516-.211a10 10 0 0 0-.443.05 9.4 9.4 0 0 0-.062-4.509A1.38 1.38 0 0 0 9.125.111zM11.5 14.721H8c-.51 0-.863-.069-1.14-.164-.281-.097-.506-.228-.776-.393l-.04-.024c-.555-.339-1.198-.731-2.49-.868-.333-.036-.554-.29-.554-.55V8.72c0-.254.226-.543.62-.65 1.095-.3 1.977-.996 2.614-1.708.635-.71 1.064-1.475 1.238-1.978.243-.7.407-1.768.482-2.85.025-.362.36-.594.667-.518l.262.066c.16.04.258.143.288.255a8.34 8.34 0 0 1-.145 4.725.5.5 0 0 0 .595.644l.003-.001.014-.003.058-.014a9 9 0 0 1 1.036-.157c.663-.06 1.457-.054 2.11.164.175.058.45.3.57.65.107.308.087.67-.266 1.022l-.353.353.353.354c.043.043.105.141.154.315.048.167.075.37.075.581 0 .212-.027.414-.075.582-.05.174-.111.272-.154.315l-.353.353.353.354c.047.047.109.177.005.488a2.2 2.2 0 0 1-.505.805l-.353.353.353.354c.006.005.041.05.041.17a.9.9 0 0 1-.121.416c-.165.288-.503.56-1.066.56z"/>
+                    </svg>
+                </button>
+            </div>
+            <hr>
+            <p style="font-size:10px;">전체 댓글 <span style="color:orange;">1</span> 개</p>
+            <hr style="color:#fff;">
+            <div class="comments row mt-2">
+                <div class="col-2">
+                    <p>준엽</p>
+                </div>
+                <div class="col-8">
+                    <p>먹었음 ㅋㅋ</p>
+                </div>
+                <div class="col-2">
+                    <p style="font-size:10px;" class="mt-1">2024-08-27 15:43:33</p>
+                </div>
+                <hr style="color:#fff;">
+            </div>
+            <div class="commentWrite mt-3">
+                <h6 style="color:white; font-size:10px;" class="mb-3">댓글 작성</h6>
+                <div class="row pt-3 pb-3 border-top border-secondary-subtle">
+                    <div class="col-2 pt-2">
+                        <p>구난병</p>
+                    </div>
+                    <div class="col-10">
+                        <textarea name="comment" id="comment" cols="100" rows="2"
+                        style="color:#fff; background-color : #1f1f1f;"></textarea>
+                    </div>
+                    <div class="mt-2 row">
+                        <div class="col-10">&nbsp;</div>
+                        <button class="btn btn-primary rounded col-1 ms-5">등록
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block layout:fragment="script"></th:block>
+</body>
+
+</html>
