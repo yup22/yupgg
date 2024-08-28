@@ -23,9 +23,9 @@
             display: flex;
             width: 75px;
             align-items: center;
-    justify-content: center;
-    font-size:15px;
-    margin-top: 10px;
+            justify-content: center;
+            font-size:15px;
+            margin-top: 10px;
         }
 
         button.btn-primary:hover {
@@ -136,7 +136,7 @@
                     <p th:text="${post.header}">말머리</p>
                 </div>
                 <div class="col-5">
-                    <a th:href="@{/board/userBoard/{id}(id=${post.id})}" th:text="${post.title}">제목</a>
+                    <a th:href="@{/board/userBoard/{id}(id=${post.id})}" th:text="${post.title}+' ['+${post.comments.size}+']'">제목</a>
                 </div>
                 <div class="col-1">
                     <p th:text="${post.author}">작성자</p>

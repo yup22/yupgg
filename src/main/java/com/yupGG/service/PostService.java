@@ -3,6 +3,7 @@ package com.yupGG.service;
 import com.yupGG.dto.PostDto;
 import com.yupGG.entity.Post;
 import com.yupGG.repository.PostRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,10 +33,12 @@ public class PostService {
         postRepository.save(post);
     }
 
-    public void incrementLikeCount(Long id) {
-        Post post = postRepository.findById(id).orElseThrow(() -> new RuntimeException("Post not found"));
+    public Post incrementLikeCount(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
         post.setLikeCount(post.getLikeCount() + 1);
         postRepository.save(post);
+        return post;
     }
 
     public void createPost(PostDto postDto) {
@@ -62,7 +65,27 @@ public class PostService {
         postRepository.save(post);
     }
 
+    public void updatePostView(Long id, Post post1) {
+        // 기존 포스트를 데이터베이스에서 조회
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Post not found"));
+
+
+        // 조회수 증가 처리 (예시로 추가)
+        post.setViewCount(post.getViewCount() + 1);
+
+        // 변경된 값 저장
+        postRepository.save(post);
+    }
+
     public Optional<Post> getPostById(Long id) {
         return postRepository.findById(id);
+    }
+
+    public void deletePost(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Post not found"));
+
+        postRepository.delete(post);
     }
 }

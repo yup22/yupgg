@@ -1,14 +1,15 @@
 package com.yupGG.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class Post {
@@ -17,11 +18,15 @@ public class Post {
     private Long id;
     private String header;
     private String title;
-    private String Content;
+    private String content;
     private String author;
     private int viewCount;
     private int likeCount;
     private int commentCount;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Comment> comments;
 
     @Column(name = "created_date")
     private LocalDateTime createdDate;
