@@ -143,6 +143,20 @@
                     alert('삭제권한이 없습니다.');
                 }
             });
+            $('#editBtn').click(function(e){
+                e.preventDefault(); // 기본 링크 동작 방지
+                var postId = $('#postId').val();
+                var currentUser = $('#currentUser').val();
+                var postAuthor = $('#postAuthor').val();
+
+                if( currentUser === postAuthor ){
+                    if(confirm('수정 하시겠습니까?')){
+                        location.href = '/board/userBoard/' + postId + '/edit'; // 수정 페이지로 이동
+                    }
+                } else{
+                    alert('수정 권한이 없습니다.');
+                }
+            });
         });
     </script>
 </head>
@@ -179,7 +193,7 @@
             <hr>
             <p style="font-size:10px; display:inline-block;">전체 댓글 <span style="color:orange;" th:text="${post.comments.size}">0</span> 개</p>
             <div style="float:right;">
-                <a style="color:lightgray; font-size:13px;" href="#" class="me-2">수정</a>
+                <a style="color:lightgray; font-size:13px;" href="#" class="me-2" id="editBtn">수정</a>
                 <a style="color:lightgray; font-size:13px;" href="#" id="deleteBtn">삭제</a>
                 <input type="hidden" id="currentUser" th:value="${user}"/>
                 <input type="hidden" id="postAuthor" th:value="${post.author}"/>

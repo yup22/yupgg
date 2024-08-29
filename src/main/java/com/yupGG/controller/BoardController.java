@@ -153,6 +153,47 @@ public class BoardController {
         }
     }
 
+    @GetMapping("/userBoard/{postId}/edit")
+    public String editPost(@PathVariable("postId") Long postId,Model model) {
+        Optional<Post> postOptional = postService.getPostById(postId);
+        Post post=postOptional.get();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUser = authentication.getName();
+        System.out.println(currentUser);
+        model.addAttribute("user", currentUser);
+        model.addAttribute("post", post);
+
+        return "/board/boardWrite";
+    }
+
+    @PostMapping("/userBoard/{postId}/edit")
+    public String updatePost(@PathVariable("postId") Long postId,
+                             @RequestParam("title") String title,
+                             @RequestParam(name = "header") String header,
+                             @RequestParam("content") String content,
+                             Authentication authentication) {
+        // 현재 사용자 이름 가져오기
+        String currentUser = authentication.getName();
+
+        // 포스트 가져오기
+        Optional<Post> postOptional = postService.getPostById(postId);
+        System.out.println("ㅎㅇㅎㅇ");
+        if (!postOptional.isPresent()) {
+            // 포스트가 없을 때 적절한 처리를 추가합니다. 예: 에러 페이지로 리디렉션
+            return "redirect:/error";
+        }
+        System.out.println("ㅎ2ㅎ2");
+
+
+        postService.updatePost(postId,title,header,content);
+
+        System.out.println("ㅎ2ㅎ23");
+
+        // 업데이트 후 포스트 보기 페이지로 리디렉션
+        return "redirect:/board/userBoard/" + postId;
+    }
+
+
     @PostMapping
     public void createPost(@RequestBody PostDto postDTO) {
         postService.createPost(postDTO);

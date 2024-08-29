@@ -88,4 +88,13 @@ public class PostService {
 
         postRepository.delete(post);
     }
+
+    public void updatePost(Long id,String title, String header, String content) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Post not found"));
+        post.setTitle(title);
+        post.setHeader(header);
+        post.setContent(content);
+        postRepository.save(post);
+    }
 }

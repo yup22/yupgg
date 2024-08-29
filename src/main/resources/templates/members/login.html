@@ -11,7 +11,7 @@
             margin-bottom: 5px;
         }
 
-        form {
+        #loginForm {
             width: 550px;
             margin: 0 auto;
             padding: 10px;
@@ -94,7 +94,7 @@
     <div class="container-fluid row" style=" height:680px;">
         <aside id="left" class="col-4">
         </aside>
-        <form action="/members/login" role="form" method="post" class="col m-5">
+        <form id="loginForm" action="/members/login" role="form" method="post" class="col m-5">
             <h3>로그인</h3>
             <div class="form-group mb-2">
                 <label th:for="email">이메일 주소</label>

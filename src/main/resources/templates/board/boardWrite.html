@@ -45,7 +45,7 @@
         });
     });
 });
-    </script>
+
     </script>
 </head>
 
@@ -57,7 +57,22 @@
                 자유게시판
             </h3>
         </div>
-        <form id="postForm" action="/board/save" method="POST">
+        <script>
+            // 서버에서 전달된 값으로 'post'가 존재하는지 여부를 판단합니다.
+                var postExists = ${post != null}; // 이 값은 서버에서 전달된 값으로 판단합니다.
+
+                // 폼의 action 속성을 동적으로 설정합니다.
+                window.onload = function() {
+                    var form = document.getElementById("postForm");
+                    if (postExists) {
+                        form.action = "/board/userBoard/{postId}/edit";
+                    } else {
+                        form.action = "/board/save";
+                    }
+                };
+        </script>
+        <form id="postForm" method="POST">
+            <input type="hidden" name="postId" value="${post.id}">
             <input type="hidden" name="header" id="header" value="일반">
             <input type="hidden" name="author" id="author" th:text="${user}">
             <input type="hidden" name="_csrf" th:value="${_csrf.token}">
@@ -83,7 +98,7 @@
                     <input type="text"
                            style="width:500px; height: 30px; line-height:30px; color:#fff; background-color : #1f1f1f;"
                            class="col-3 mt-1 mx-4 border border-light rounded" id="title" name="title"
-                           placeholder="제목을 작성해주세요.">
+                           placeholder="제목을 작성해주세요." th:value="${post.title}">
                 </div>
 
                 <script>
@@ -95,7 +110,7 @@
                    });
                 </script>
                 <textarea name="content" id="content" cols="120" rows="20" class="mt-3 p-3"
-                          style="color:#fff; background-color : #1f1f1f;"></textarea>
+                          style="color:#fff; background-color : #1f1f1f;" th:text="${post.content}"></textarea>
             </div>
 
             <div class="boardTable mt-1 me-5 pe-5" style="width:1000px;">
