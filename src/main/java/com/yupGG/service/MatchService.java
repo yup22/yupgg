@@ -8,6 +8,7 @@ import com.yupGG.config.RiotHttpClient;
 
 import com.yupGG.dto.ResponseDto;
 import com.yupGG.dto.MatchDto;
+import com.yupGG.entity.Match;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -52,6 +53,9 @@ public class MatchService {
                 System.err.println("Failed to retrieve match: " + id);
             }
         }
+
         return matchDtoList;
     }
+
+
 }

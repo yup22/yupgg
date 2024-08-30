@@ -175,7 +175,7 @@
                     <div class="col-6">&nbsp;</div>
                     <p style="line-height:40px; font-size:13px;" class="col-1" th:text="'조회 ' + ${post.viewCount}"></p>
                     <p style="line-height:40px; font-size:13px;" class="col-1" th:text="'추천 ' + ${post.likeCount}"></p>
-                    <p style="line-height:40px; font-size:13px;" class="col-1" th:text="'댓글 ' + ${post.commentCount}"></p>
+                    <p style="line-height:40px; font-size:13px;" class="col-1" th:text="'댓글 ' + ${post.comments.size}"></p>
                 </div>
             </div>
             <hr style="color:#fff;">
@@ -213,7 +213,7 @@
                     <hr style="color:#fff;">
                 </div>
             </div>
-            <div class="commentWrite mt-3">
+            <div class="commentWrite mt-3" th:if="${user} != 'anonymousUser'">
                 <h6 style="color:white; font-size:10px;" class="mb-3">댓글 작성</h6>
                 <div class="row pt-3 pb-3 border-top border-secondary-subtle">
                     <div class="col-2 pt-2">

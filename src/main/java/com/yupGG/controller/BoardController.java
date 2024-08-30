@@ -43,17 +43,21 @@ public class BoardController {
     @GetMapping("/freeBoard")
     public String freeBoard(Model model, @RequestParam(name = "page", defaultValue = "0")int page) {
         Page<Post> postPage = postService.findPosts(page);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String user = authentication.getName();
+        System.out.println("로그인 유저 :" + user);
+        model.addAttribute("user", user);
+
         model.addAttribute("posts", postPage.getContent());
         model.addAttribute("page", postPage);
         return "/board/freeBoard";
     }
 
     @GetMapping("/boardWrite")
-    public String writePost(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUser = authentication.getName();
-        System.out.println(currentUser);
-        model.addAttribute("user", currentUser);
+    public String writePost(Model model,Principal principal) {
+        System.out.println("글쓰기 컨트롤러");
+
+        model.addAttribute("user", principal.getName());
         return "/board/boardWrite";
     }
 
@@ -64,7 +68,7 @@ public class BoardController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentUser = authentication.getName();
-
+        System.out.println("ㅎㅇ save메서드야 ");
         PostDto postDto = new PostDto();
         postDto.setTitle(title);
         postDto.setHeader(header);

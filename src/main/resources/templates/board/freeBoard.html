@@ -152,7 +152,23 @@
                 </div>
             </div>
             <div class="boardBtn" >
-                <button class="btn btn-dark" onclick="location.href='/board/boardWrite'">글쓰기</button>
+                <script>
+                    var postExists = "[[${user}]]" !== 'anonymousUser';
+                    console.log('[[${user}]]');
+                    console.log(postExists);
+                        // 폼의 action 속성을 동적으로 설정합니다.
+                        window.onload = function() {
+                        var writeBtn = document.getElementById("writeBtn");
+                        writeBtn.onclick = function() {
+                            if (postExists) {
+                                location.href = '/board/boardWrite';
+                            } else {
+                                location.href = '/members/login';
+                            }
+                        };
+                    };
+                </script>
+                <button id="writeBtn" class="btn btn-dark" onclick="location.href = '/board/boardWrite'" >글쓰기</button>
             </div>
         </div>
         <div class="pagination justify-content-center mt-3">
