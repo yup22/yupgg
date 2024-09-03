@@ -6,6 +6,9 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yupGG.config.RiotHttpClient;
 import com.yupGG.dto.*;
+import com.yupGG.entity.Summoner;
+import com.yupGG.repository.SummonerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +19,8 @@ import java.util.List;
 public class SummonerService {
     private final RiotHttpClient riotHttpClient;
     private final ObjectMapper objectMapper;
-
+    @Autowired
+    private SummonerRepository summonerRepository;
     @Value("${riot.url}")
     private String riotUrl;
     private String riotAsiaUrl = "https://asia.api.riotgames.com";
@@ -46,6 +50,7 @@ public class SummonerService {
         return summonerDTO;
     }
 
+
     public List<LeagueEntryDto> getSummonerRank(String summonerId) throws JsonProcessingException {
         List<LeagueEntryDto> leagueEntryDtoList = new ArrayList<>();
         StringBuilder sb = new StringBuilder("/lol/league/v4/entries/by-summoner/"+summonerId);
@@ -57,4 +62,8 @@ public class SummonerService {
         }
         return leagueEntryDtoList;
     }
+
+    /*public void updateSummoner(String summonerId, Integer profileIconId, long summonerLevel, String gameName, String tagLine) {
+        summonerRepository.updateSummoner(summonerId, profileIconId, summonerLevel, gameName, tagLine);
+    }*/
 }

@@ -5,6 +5,9 @@ import com.yupGG.dto.*;
 import com.yupGG.dto.MatchDto;
 import com.yupGG.dto.match.InfoDto;
 import com.yupGG.dto.match.info.ParticipantDto;
+import com.yupGG.entity.LeagueEntry;
+import com.yupGG.entity.Match;
+import com.yupGG.entity.Summoner;
 import com.yupGG.service.MatchService;
 import com.yupGG.service.SummonerService;
 import org.slf4j.Logger;
@@ -25,6 +28,7 @@ import java.util.Map;
 public class SearchController {
     private final SummonerService summonerService;
     private final MatchService matchService;
+
 
     public SearchController(SummonerService summonerService, MatchService matchService) {
         this.summonerService = summonerService;
@@ -76,42 +80,16 @@ public class SearchController {
                           @RequestParam("tagLine") String tagLine, Model model) throws JsonProcessingException {
 
         PuuidDto puuidDto = new PuuidDto();
+        SummonerDTO summonerDTO = new SummonerDTO();
 
         if (gameName != null && !gameName.isEmpty()) {
             puuidDto = summonerService.getPuuid(gameName, tagLine);
         }
         String puuid = puuidDto.getPuuid();
+        summonerDTO = summonerService.getSummonerByPuuid(puuid);
 
         List<MatchDto> matchDtos = matchService.getMatch(matchService.getMatchId(puuid));
-        List<ParticipantDto> gameInfo = new ArrayList<>();
-        List<InfoDto> infoDtos = new ArrayList<>();
-        InfoDto infoDto = null;
-
-        for (MatchDto matchDto : matchDtos) {
-            // 먼저 infoDto가 null인지 확인합니다.
-            infoDto = matchDto.getInfo();
-
-            if (infoDto != null) {
-                // participants가 null이 아닐 경우에만 루프를 돌도록 합니다.
-                List<ParticipantDto> participants = infoDto.getParticipants();
-
-                if (participants != null) {
-                    for (ParticipantDto participant : participants) {
-                        if (puuid.equals(participant.getPuuid())) {
-                            System.out.println("게임 ID: " + infoDto.getGameId());
-                            infoDtos.add(infoDto);
-                            gameInfo.add(participant);
-                            // 필요한 다른 정보도 출력할 수 있습니다.
-                        }
-                    }
-                } else {
-                    System.out.println("participants 리스트가 null입니다.");
-                }
-
-            } else {
-                System.out.println("infoDto가 null입니다.");
-            }
-        }
+        List<ParticipantDto> gameInfo = matchService.participantDtos(matchDtos, puuid);
 
         for (MatchDto match : matchDtos) {
             match.setWinner(match.getInfo().getParticipants().stream()
@@ -149,6 +127,14 @@ public class SearchController {
             model.addAttribute("leagueEntryDto", leagueEntryDto.get(0));
         } else {
             model.addAttribute("leagueEntryDto", null);
+        }
+        System.out.println("소환사아이디 1 :" + summonerId);
+        Summoner savesummoner = matchService.saveSummoner(summonerDTO,puuidDto);
+        for (int i = 0; i < matchDtos.size(); i++) {
+            Match saveMatch = matchService.saveMatch(matchDtos.get(i),gameInfo.get(i),savesummoner);
+        }
+        for (int i = 0; i < leagueEntryDto.size(); i++) {
+            LeagueEntry leagueEntry = matchService.saveLeagueEntry(leagueEntryDto.get(i),savesummoner);
         }
 
         model.addAttribute("spell", summonerSpells);
