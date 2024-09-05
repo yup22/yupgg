@@ -16,7 +16,7 @@
             margin-top: -5px;
             margin-bottom: 5px;
         }
-        form {
+        #signIn {
             width: 550px;
             margin: 0 auto;
             padding: 10px;
@@ -224,7 +224,7 @@
 </th:block>
 <body>
 <div layout:fragment="content">
-    <form action="/members/new" role="form" method="post" th:object="${memberFormDto}">
+    <form id="signIn" action="/members/new" role="form" method="post" th:object="${memberFormDto}">
         <h3>회원가입</h3>
         <div class="form-group">
             <label th:for="name">이름</label>

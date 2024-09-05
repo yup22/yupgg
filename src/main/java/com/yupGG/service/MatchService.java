@@ -117,14 +117,15 @@ public class MatchService {
         return summonerRepository.save(summoner);
     }
 
-    public Match saveMatch(MatchDto matchDto, ParticipantDto participantDto, Summoner summoner) {
+    public Match saveMatch(MatchDto matchDto, ParticipantDto participantDto, Summoner summoner,int i) {
         Match match = new Match();
         match.setMatch(matchDto, participantDto, summoner);
         System.out.println("소환사아이디2 : " + summoner.getSummonerId());
-        if (matchRepository.findByChampionName(summoner.getSummonerId()) != null) { // 여기 문제
+        if (matchRepository.findGameId(matchDto.getInfo().getGameId()) != null) { // 여기 문제
             System.out.println("소환사아이디3 :" + summoner.getSummonerId());
             matchRepository.updateMatch(
                     match.getId(),
+                    matchDto.getInfo().getGameId(),
                     matchDto.getInfo().getQueueId(),
                     matchDto.getInfo().getGameEndTimestamp(),
                     matchDto.getInfo().getGameDuration(),
@@ -165,6 +166,13 @@ public class MatchService {
             return null;
         }
         return leagueEntryRepository.save(leagueEntry);
+    }
+
+    public List<Match> getMatchHistory(String summonerId) {
+        List<Match> matchHistory = matchRepository.findBySummoner_SummonerId(summonerId);
+
+
+        return matchHistory;
     }
 
 }

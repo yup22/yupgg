@@ -15,12 +15,14 @@ public interface MatchRepository extends JpaRepository<Match, Long> {
     // 사용자 정의 메소드 추가 가능
     List<Match> findBySummoner_SummonerId(String summonerId);
 
-    Match findByChampionName(String summonerId);
+    @Query("SELECT m FROM Match m WHERE m.gameId = :gameId")
+    Match findGameId(@Param("gameId") Long gameId);
     @Modifying
     @Transactional
-    @Query("UPDATE Match m SET m.queueId = :queueId, m.gameEndTimestamp = :gameEndTimestamp, m.gameDuration = :gameDuration, m.championName = :championName, m.summoner1Id = :summoner1Id, m.summoner2Id = :summoner2Id, m.item0 = :item0, m.item1 = :item1, m.item2 = :item2, m.item3 = :item3, m.item4 = :item4, m.item5 = :item5, m.item6 = :item6, m.win = :win, m.kills = :kills, m.deaths = :deaths, m.assists = :assists, m.totalMinionsKilled = :totalMinionsKilled, m.visionScore = :visionScore WHERE m.id = :id")
+    @Query("UPDATE Match m SET m.gameId = :gameId, m.queueId = :queueId, m.gameEndTimestamp = :gameEndTimestamp, m.gameDuration = :gameDuration, m.championName = :championName, m.summoner1Id = :summoner1Id, m.summoner2Id = :summoner2Id, m.item0 = :item0, m.item1 = :item1, m.item2 = :item2, m.item3 = :item3, m.item4 = :item4, m.item5 = :item5, m.item6 = :item6, m.win = :win, m.kills = :kills, m.deaths = :deaths, m.assists = :assists, m.totalMinionsKilled = :totalMinionsKilled, m.visionScore = :visionScore WHERE m.id = :id")
     void updateMatch(
             @Param("id") Long id,
+            @Param("gameId") Long gameId,
             @Param("queueId") Integer queueId,
             @Param("gameEndTimestamp") Long gameEndTimestamp,
             @Param("gameDuration") long gameDuration,

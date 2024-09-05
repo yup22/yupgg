@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<div th:fragment="header" style="position:sticky; top:0; z-index:1;">
+<div th:fragment="header" style="position:sticky; top:0; z-index:3;">
     <div class="w-100">
         <header class="lh-1 pb-3" style="background-color:#1f1f1f;">
             <div class="row pt-3 flex-nowrap justify-content-between align-items-center" style="width:1000px; margin:0 auto; font-size:20px; height:50px; line-height:50px;">
@@ -11,7 +11,7 @@
                     </a>
                 </div>
                 <div class="col-4 pb-3">
-                    <form class="col-9 row mt-3 pb-5 bg-white rounded-pill" id="searchForm" style=" width: 400px; height:40px;"
+                    <form class="searchForm col-9 row mt-3 pb-5 bg-white rounded-pill" id="searchForm" style=" width: 400px; height:40px;"
                           action="/riot/summoners" method="get">
                         <div class=" col-2" >
                             <button type="button" class="pb-2 btn dropdown-toggle" style="font-size:13px;" data-bs-toggle="dropdown" aria-expanded="false">
@@ -26,8 +26,8 @@
                         <input name="summonersTag" id="summonersTag" class="col-2 form-control border-light my-2" type="search"
                                value="kr1" aria-label="Search" style="width:70px; height:35px; text-align:center;">
 
-                        <button class="btn col-2 ms-2" type="submit" id="searchBtn" style="float:right; width:30px;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="none" stroke="currentColor"
+                        <button class="btn col-2 ms-2" type="submit" id="searchButton" style="float:right; width:30px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
                                  stroke-linecap="round" stroke-linejoin="round" stroke-width="2" role="img"
                                  viewBox="0 0 24 24">
                                 <title>Search</title>

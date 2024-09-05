@@ -140,8 +140,8 @@
                     <div class="summonersImg col-3">
                         <img th:src="|https://ddragon.leagueoflegends.com/cdn/14.16.1/img/profileicon/${summoners.profileIconId}.png|"
                             th:alt="${summoners.profileIconId}" style="width:100px; border-radius:15px;"
-                            class="z-2 position-absolute">
-                        <p class="text-white z-3 position-absolute"
+                            class="z-0 position-absolute">
+                        <p class="text-white z-0 position-absolute"
                             style="margin-top:85px; background-color:#1f1f1f; margin-left:30px; width:40px; border-radius:15px; text-align:center;">
                             <span th:text="${summoners.summonerLevel}"></span>
                         </p>
@@ -180,7 +180,7 @@
                 <div class="inner row my-2" th:each="match : ${matchDto}">
                     <div class="gameTable col-8 rounded row p-1 pb-2" style="height:120px;"
                         th:style="'background-color:' + (${gameInfo[matchStat.index].win ? 'rgb(1, 33, 44)' : 'rgb(53, 9, 9)'})">
-                        <div class="head col-2 px-4">
+                        <div class="head col-2 px-4" th:if="${match.info != null}">
                             <div class="headGroup">
                                 <div class="gametype">
                                     <span class="fw-bolder" th:text="${match.info.queueId == 420 ? '솔랭' : '일반'}"></span>
@@ -198,6 +198,26 @@
                             <div class="timeStamp">
                                 <span
                                     th:text="${#numbers.formatInteger(match.info.gameDuration / 60, 0)} + '분 ' + ${#numbers.formatInteger(match.info.gameDuration % 60, 2)}+ '초'"></span>
+                            </div>
+                        </div>
+                        <div class="head col-2 px-4" th:if="${match.info == null}">
+                            <div class="headGroup">
+                                <div class="gametype">
+                                    <span class="fw-bolder" th:text="${match.queueId == 420 ? '솔랭' : '일반'}"></span>
+                                </div>
+                                <div class="timeStamp">
+                                    <span th:text="${#dates.format(match.gameEndTimestamp, 'MM/dd')}"></span>
+                                </div>
+                            </div>
+                            <div style="margin-top:-12px; margin-bottom: -12px;">
+                                <hr class="w-50" style="color:white;">
+                            </div>
+                            <div class="headGroup">
+                                <span class="fw-bolder" th:text="${gameInfo[matchStat.index].win ? '승리' : '패배'}"></span>
+                            </div>
+                            <div class="timeStamp">
+                                <span
+                                        th:text="${#numbers.formatInteger(match.gameDuration / 60, 0)} + '분 ' + ${#numbers.formatInteger(match.gameDuration % 60, 2)}+ '초'"></span>
                             </div>
                         </div>
                         <div class="main col-8 row">
@@ -286,9 +306,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="border border-light col-3">
 
-                    </div>
                 </div>
             </div>
 

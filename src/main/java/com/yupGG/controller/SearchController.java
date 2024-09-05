@@ -58,10 +58,21 @@ public class SearchController {
 
         String summonerId = summonerDTO.getId();
 
+        List<Match> matchHistory =matchService.getMatchHistory(summonerId);
+        for (int i = 0; i < matchHistory.size(); i++) {
+            System.out.println(matchHistory.get(i).getChampionName());
+        }
+
+
         if (summonerId != null && !summonerId.isEmpty()) {
             leagueEntryDto = summonerService.getSummonerRank(summonerId);
         }
 
+
+        model.addAttribute("spell", summonerSpell());
+
+        model.addAttribute("matchDto", matchHistory);
+        model.addAttribute("gameInfo", matchHistory);
         model.addAttribute("summoners", summonerDTO);
         model.addAttribute("puuidDto", puuidDto);
         model.addAttribute("puuid", puuid);
@@ -96,6 +107,42 @@ public class SearchController {
                     .anyMatch(p -> p.getPuuid().equals(puuid) && p.isWin()));
         }
 
+
+
+        model.addAttribute("spell", summonerSpell());
+
+
+        String summonerId = gameInfo.getFirst().getSummonerId();
+        List<LeagueEntryDto> leagueEntryDto = null;
+        if (summonerId != null && !summonerId.isEmpty()) {
+            leagueEntryDto = summonerService.getSummonerRank(summonerId);
+        }
+        if (!leagueEntryDto.isEmpty()) {
+            model.addAttribute("leagueEntryDto", leagueEntryDto.get(0));
+        } else {
+            model.addAttribute("leagueEntryDto", null);
+        }
+        Summoner savesummoner = matchService.saveSummoner(summonerDTO,puuidDto);
+        for (int i = 0; i < matchDtos.size(); i++) {
+            Match saveMatch = matchService.saveMatch(matchDtos.get(i),gameInfo.get(i),savesummoner,i);
+        }
+        for (int i = 0; i < leagueEntryDto.size(); i++) {
+            LeagueEntry leagueEntry = matchService.saveLeagueEntry(leagueEntryDto.get(i),savesummoner);
+        }
+
+        for (int i = 0; i < matchDtos.getFirst().getMetadata().getParticipants().size(); i++) {
+            System.out.println("이게 뭐징~~? : " + matchDtos.getFirst().getMetadata().getParticipants().get(i));
+        }
+
+
+        model.addAttribute("matchDto", matchDtos);
+        model.addAttribute("gameInfo", gameInfo);
+        // 필요한 다른 데이터를 모델에 추가
+
+        return "search/searchPage :: #match-container"; // 특정 섹션만 반환
+    }
+
+    public Map<Integer, String> summonerSpell() {
         Map<Integer, String> summonerSpells = new HashMap<>();
 
         summonerSpells.put(21, "SummonerBarrier");
@@ -116,32 +163,6 @@ public class SearchController {
         summonerSpells.put(12, "SummonerTeleport");
         summonerSpells.put(54, "Summoner_UltBookPlaceholder");
         summonerSpells.put(55, "Summoner_UltBookSmitePlaceholder");
-
-        String summonerId = gameInfo.getFirst().getSummonerId();
-        List<LeagueEntryDto> leagueEntryDto = null;
-        if (summonerId != null && !summonerId.isEmpty()) {
-            leagueEntryDto = summonerService.getSummonerRank(summonerId);
-        }
-
-        if (!leagueEntryDto.isEmpty()) {
-            model.addAttribute("leagueEntryDto", leagueEntryDto.get(0));
-        } else {
-            model.addAttribute("leagueEntryDto", null);
-        }
-        System.out.println("소환사아이디 1 :" + summonerId);
-        Summoner savesummoner = matchService.saveSummoner(summonerDTO,puuidDto);
-        for (int i = 0; i < matchDtos.size(); i++) {
-            Match saveMatch = matchService.saveMatch(matchDtos.get(i),gameInfo.get(i),savesummoner);
-        }
-        for (int i = 0; i < leagueEntryDto.size(); i++) {
-            LeagueEntry leagueEntry = matchService.saveLeagueEntry(leagueEntryDto.get(i),savesummoner);
-        }
-
-        model.addAttribute("spell", summonerSpells);
-        model.addAttribute("matchDto", matchDtos);
-        model.addAttribute("gameInfo", gameInfo);
-        // 필요한 다른 데이터를 모델에 추가
-
-        return "search/searchPage :: #match-container"; // 특정 섹션만 반환
+        return summonerSpells;
     }
 }

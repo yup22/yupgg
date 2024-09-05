@@ -18,7 +18,7 @@ public class Match {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    private Long gameId; // 게임 ID
     private Integer queueId;
     private Long gameEndTimestamp;
     private long gameDuration;
@@ -32,6 +32,7 @@ public class Match {
     private Integer item4;
     private Integer item5;
     private Integer item6;
+    private Integer info;
 
     private Boolean win;
     private Integer kills;
@@ -45,7 +46,7 @@ public class Match {
     private Summoner summoner;
 
     public Match setMatch(MatchDto dto,ParticipantDto gameInfo,Summoner summoner) {
-
+        this.setGameId(dto.getInfo().getGameId());
         this.setQueueId(dto.getInfo().getQueueId());
         this.setGameEndTimestamp(dto.getInfo().getGameEndTimestamp());
         this.setGameDuration(dto.getInfo().getGameDuration());
