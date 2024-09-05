@@ -14,6 +14,8 @@ import java.util.List;
 public interface MatchRepository extends JpaRepository<Match, Long> {
     // 사용자 정의 메소드 추가 가능
     List<Match> findBySummoner_SummonerId(String summonerId);
+    List<Match> findBySummoner_SummonerIdOrderByGameEndTimestampDesc(String summonerId);
+
 
     @Query("SELECT m FROM Match m WHERE m.gameId = :gameId")
     Match findGameId(@Param("gameId") Long gameId);

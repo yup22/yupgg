@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,10 +32,17 @@ public class SummonerService {
         this.objectMapper = objectMapper;
     }
 
-    public PuuidDto getPuuid(String summoners, String summonersTag) throws JsonProcessingException {
+    public PuuidDto getPuuid(String summoners, String summonersTag) throws JsonProcessingException, UnsupportedEncodingException {
+        String encodedSummoners = URLEncoder.encode(summoners, "UTF-8").replace("+", "%20"); // +을 %20으로 변환
+        String encodedSummonersTag = URLEncoder.encode(summonersTag, "UTF-8").replace("+", "%20"); // +을 %20으로 변환
         PuuidDto puuidDto = new PuuidDto();
-        StringBuilder sb = new StringBuilder("/riot/account/v1/accounts/by-riot-id/" + summoners + "/" + summonersTag);
+        StringBuilder sb = new StringBuilder("/riot/account/v1/accounts/by-riot-id/" + encodedSummoners + "/" + encodedSummonersTag);
+        // 디버깅
+        System.out.println("Request URL: " + riotAsiaUrl + sb.toString());
+
         ResponseDto responseDto = riotHttpClient.getRiotResponse(riotAsiaUrl,sb.toString());
+        // 응답 본문 로그
+        System.out.println("Response Body: " + responseDto.getResponseBody());
         if (responseDto.isOK()) {
             puuidDto = objectMapper.readValue(responseDto.getResponseBody(), PuuidDto.class);
         }
@@ -54,6 +63,7 @@ public class SummonerService {
     public List<LeagueEntryDto> getSummonerRank(String summonerId) throws JsonProcessingException {
         List<LeagueEntryDto> leagueEntryDtoList = new ArrayList<>();
         StringBuilder sb = new StringBuilder("/lol/league/v4/entries/by-summoner/"+summonerId);
+        System.out.println("랭크 겟 : "+sb.toString());
         ResponseDto responseDto = riotHttpClient.getRiotResponse(riotUrl, sb.toString());
 
         if (responseDto.isOK()) {
@@ -63,7 +73,5 @@ public class SummonerService {
         return leagueEntryDtoList;
     }
 
-    /*public void updateSummoner(String summonerId, Integer profileIconId, long summonerLevel, String gameName, String tagLine) {
-        summonerRepository.updateSummoner(summonerId, profileIconId, summonerLevel, gameName, tagLine);
-    }*/
+
 }

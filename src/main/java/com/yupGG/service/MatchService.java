@@ -121,7 +121,7 @@ public class MatchService {
         Match match = new Match();
         match.setMatch(matchDto, participantDto, summoner);
         System.out.println("소환사아이디2 : " + summoner.getSummonerId());
-        if (matchRepository.findGameId(matchDto.getInfo().getGameId()) != null) { // 여기 문제
+        if (matchRepository.findGameId(matchDto.getInfo().getGameId()) != null) {
             System.out.println("소환사아이디3 :" + summoner.getSummonerId());
             matchRepository.updateMatch(
                     match.getId(),
@@ -169,7 +169,7 @@ public class MatchService {
     }
 
     public List<Match> getMatchHistory(String summonerId) {
-        List<Match> matchHistory = matchRepository.findBySummoner_SummonerId(summonerId);
+        List<Match> matchHistory = matchRepository.findBySummoner_SummonerIdOrderByGameEndTimestampDesc(summonerId);
 
 
         return matchHistory;

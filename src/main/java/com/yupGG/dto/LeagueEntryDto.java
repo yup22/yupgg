@@ -20,4 +20,5 @@ public class LeagueEntryDto {
     private boolean veteran;
     private boolean freshBlood;
     private boolean inactive;
+    private MiniSeriesDTO miniSeries;
 }

@@ -34,7 +34,6 @@
         a{
             text-decoration:none;
             color: #fff;
-            padding-left:10px;
         }
         /* 전체 페이지네이션 스타일 */
     .pagination {
@@ -136,7 +135,7 @@
                     <p th:text="${post.header}">말머리</p>
                 </div>
                 <div class="col-5">
-                    <a th:href="@{/board/userBoard/{id}(id=${post.id})}" th:text="${post.title}+' ['+${post.comments.size}+']'">제목</a>
+                    <a class="px-2" th:href="@{/board/userBoard/{id}(id=${post.id})}" th:text="${post.title}+' ['+${post.comments.size}+']'">제목</a>
                 </div>
                 <div class="col-1">
                     <p th:text="${post.author}">작성자</p>
