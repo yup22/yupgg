@@ -156,6 +156,17 @@ public class BoardController {
             return ResponseEntity.notFound().build();
         }
     }
+    @DeleteMapping("/userBoard/{commentId}/commentDelete")
+    public ResponseEntity<Void> deleteComment(@PathVariable("commentId") Long commentId) {
+        Optional<Comment> commentOptional = commentService.getCommentById(commentId);
+        Comment comment=commentOptional.get();
+        if (comment != null) {
+            commentService.deleteComment(commentId);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @GetMapping("/userBoard/{postId}/edit")
     public String editPost(@PathVariable("postId") Long postId,Model model) {

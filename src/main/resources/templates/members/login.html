@@ -12,11 +12,11 @@
         }
 
         #loginForm {
-            width: 550px;
-            margin: 0 auto;
+            width: 350px;
             padding: 10px;
             border-radius: 5px;
-        }
+            align-content: center;
+                 }
 
         h3 {
             margin-bottom: 20px;
@@ -91,9 +91,7 @@
 </head>
 <body class="pb-5">
 <div layout:fragment="content" id="main">
-    <div class="container-fluid row" style=" height:680px;">
-        <aside id="left" class="col-4">
-        </aside>
+    <div class="container-fluid" style="width:500px; height:680px; ">
         <form id="loginForm" action="/members/login" role="form" method="post" class="col m-5">
             <h3>로그인</h3>
             <div class="form-group mb-2">
@@ -121,8 +119,6 @@
             </a>-->
         </form>
 
-        <aside id="right" class="col-4">
-        </aside>
 
     </div>
 </div>

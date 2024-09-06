@@ -114,6 +114,16 @@
                         $button.prop('disabled', false).removeClass('button-disabled');
                         $spinner.hide();
                         $buttonText.show();
+
+                        // 승리/패배 데이터를 업데이트
+                         const win = parseInt(document.getElementById('winCount1').value, 10);
+                         const lose = parseInt(document.getElementById('loseCount1').value, 10);
+
+                        console.log('승리:', win, '패배:', lose); // 여기서도 다시 확인
+
+                        // 차트 업데이트 함수 호출
+
+                        updateChart(win, lose); // 차트 업데이트 함수
                     },
                     error: function (xhr, status, error) {
                         // 요청이 실패했을 때 실행되는 코드
@@ -127,7 +137,41 @@
                     }
                 });
             });
+
         });
+        // 차트를 업데이트하는 함수
+        function updateChart(win, lose) {
+            const chartEl = document.getElementById('chart').getContext('2d');
+
+
+            // 이전에 그려진 차트가 있으면 삭제
+            if (window.myChart) {
+                window.myChart.destroy();
+            }
+
+            // 새로운 차트를 생성
+
+            window.myChart = new Chart(chartEl, {
+                type: 'doughnut',
+                data: {
+                    labels: ['승', '패'],  // 차트 레이블
+                    datasets: [{
+                        borderWidth: 3,
+                        data: [win, lose],
+                        backgroundColor: ['rgb(1, 33, 44)', 'rgb(53, 9, 9)'],
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: 'white'  // 레이블 텍스트 색상을 흰색으로 설정
+                            }
+                        }
+                    }
+                }
+            });
+        }
     </script>
 </head>
 
@@ -174,11 +218,11 @@
             </div>
         </div>
         <div id="match-container" class="row">
-            <div class="mainSection col-8">
-                <div class="gameInfo my-5">
-                    <div class="inner my-2" th:if="${matchDto == 'null'}">
-                        <p>게임정보가 없습니다. 전적갱신을 해주세요.</p>
-                    </div>
+            <div class="mainSection my-5 col-8">
+                <div class="inner my-2" th:if="${NoMatch}">
+                    <p>게임정보가 없습니다. 전적갱신을 해주세요.</p>
+                </div>
+                <div class="gameInfo ">
                     <div class="inner my-2" th:each="match : ${matchDto}">
                         <div class="gameTable rounded row p-1 pb-2" style="height:120px;"
                              th:style="'background-color:' + (${gameInfo[matchStat.index].win ? 'rgb(1, 33, 44)' : 'rgb(53, 9, 9)'})">
@@ -362,7 +406,9 @@
                         }
                     });
                     }, 100);
+
                 });
+
             </script>
         </div>
     </div>

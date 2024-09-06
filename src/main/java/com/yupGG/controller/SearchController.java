@@ -62,6 +62,7 @@ public class SearchController {
         List<Match> matchHistory =matchService.getMatchHistory(summonerId);
         Map<String, Integer> winRate = new HashMap<>();
         int winCount = 0, loseCount = 0;
+        boolean noMatch = false;
 
 // matchHistory가 null이 아니고 비어 있지 않은지 확인
         if (matchHistory != null && !matchHistory.isEmpty()) {
@@ -69,12 +70,10 @@ public class SearchController {
                 // 각 매치의 객체가 null인지, 그리고 getChampionName()이 null이 아닌지 확인
                 if (matchHistory.get(i) != null && matchHistory.get(i).getChampionName() != null) {
                     System.out.println(matchHistory.get(i).getChampionName());
-
                     // 최대 20개의 경기까지만 처리
                     if (i == 20) {
                         break;
                     }
-
                     // 승리 여부를 확인할 때도 null 체크
                     if (Boolean.TRUE.equals(matchHistory.get(i).getWin())) {
                         winCount++;
@@ -86,6 +85,7 @@ public class SearchController {
         } else {
             // matchHistory가 null이거나 비어 있을 경우 처리
             System.out.println("매치 히스토리가 없습니다.");
+            noMatch = true;
         }
 
         winRate.put("승", winCount);
@@ -98,7 +98,7 @@ public class SearchController {
             leagueEntryDto = summonerService.getSummonerRank(summonerId);
         }
 
-
+        model.addAttribute("NoMatch", noMatch);
         model.addAttribute("spell", summonerSpell());
         model.addAttribute("matchDto", matchHistory);
         model.addAttribute("gameInfo", matchHistory);
@@ -116,8 +116,6 @@ public class SearchController {
             model.addAttribute("leagueEntryDto", "null");
 
         }
-
-
 
         return "search/searchPage";
     }
@@ -226,7 +224,7 @@ public class SearchController {
         summonerSpells.put(13, "SummonerMana");
         summonerSpells.put(30, "SummonerPoroRecall");
         summonerSpells.put(31, "SummonerPoroThrow");
-        summonerSpells.put(3, "SummonerSmite");
+        summonerSpells.put(11, "SummonerSmite");
         summonerSpells.put(39, "SummonerSnowURFSnowball_Mark");
         summonerSpells.put(32, "SummonerSnowball");
         summonerSpells.put(12, "SummonerTeleport");

@@ -157,6 +157,36 @@
                     alert('수정 권한이 없습니다.');
                 }
             });
+            $('#deleteComment').click(function(e){
+                e.preventDefault(); // 기본링크 동작방지
+                var postId = $('#postId').val();
+                var commentId = $('#commentId').val();
+                var currentUser = $('#currentUser').val();
+                var commentAuthor = $('#commentAuthor').text(); // 댓글 작성자 (동적으로 가져옴)
+
+
+                if( currentUser === commentAuthor ){
+                    if(confirm('정말로 삭제하시겠습니까?')){
+                        $.ajax({
+                            url: '/board/userBoard/' + commentId + '/commentDelete', // 실제 삭제 요청 URL로 수정해야 합니다.
+                            type: 'DELETE',
+                            headers: {
+                                [csrfHeader]: csrfToken // CSRF 토큰을 헤더에 추가
+                            },
+                            success: function(response) {
+                                alert('삭제되었습니다.');
+                                // 페이지를 새로고침하거나 다른 작업을 수행하여 삭제된 글을 반영합니다.
+                                location.href = '/board/userBoard/'+ postId;
+                            },
+                            error: function(xhr, status, error) {
+                                alert('삭제에 실패했습니다: ' + error);
+                            }
+                        });
+                    }
+                } else{
+                    alert('삭제권한이 없습니다.');
+                }
+            });
         });
     </script>
 </head>
@@ -202,13 +232,18 @@
             <div class="commentBox">
                 <div class="comments row mt-2" th:each="comment : ${post.comments}">
                     <div class="col-2">
+                        <input type="hidden" id="commentId" th:value="${comment.id}">
                         <p th:text="${comment.author}"></p>
                     </div>
                     <div class="col-8">
                         <p th:text="${comment.content}">내용</p>
                     </div>
                     <div class="col-2">
-                        <p style="font-size:10px;" class="mt-1" th:text="${#temporals.format(comment.regTime, 'yyyy-MM-dd HH:mm:ss')}">방금</p>
+                        <p style="font-size:10px; display:inline-block;" class="mt-1" th:text="${#temporals.format(comment.regTime, 'yyyy-MM-dd HH:mm:ss')}">방금</p>
+                        <a id="deleteComment" style="margin-left:10px; text-decoration:none; color:lightgray;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                        </svg></a>
                     </div>
                     <hr style="color:#fff;">
                 </div>
