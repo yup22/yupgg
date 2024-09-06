@@ -17,6 +17,7 @@ public class Member extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     //알아서 설정
+    @Column(name = "name", unique = true) // 중복 방지
     private String name;
     private String number;
 

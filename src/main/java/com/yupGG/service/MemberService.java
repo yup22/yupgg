@@ -31,6 +31,11 @@ public class MemberService implements UserDetailsService {
         if(findMember != null){
             throw new IllegalStateException("이미 가입된 메일입니다.");
         }
+        Member findMemberName = memberRepository.findByEmail(member.getEmail());
+        if (findMemberName != null) {
+            throw new IllegalStateException("중복된 이름입니다.");
+        }
+
     }
 
     @Override

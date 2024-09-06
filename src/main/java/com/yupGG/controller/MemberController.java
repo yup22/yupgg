@@ -1,11 +1,14 @@
 package com.yupGG.controller;
 
+import com.yupGG.config.DuplicateNameException;
 import com.yupGG.dto.MemberFormDto;
 import com.yupGG.entity.Member;
 import com.yupGG.service.MailService;
 import com.yupGG.service.MemberService;
+import groovyjarjarpicocli.CommandLine;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -59,6 +62,12 @@ public class MemberController {
         catch (IllegalStateException e){
             model.addAttribute("errorMessage",e.getMessage());
             return "members/memberForm";
+        }catch (DuplicateNameException e) {
+            model.addAttribute("error", e.getMessage()); // 에러 메시지를 모델에 추가
+            return "members/memberForm"; // 에러가 발생하면 원래 폼으로 돌아가기
+        } catch (DataIntegrityViolationException e) {
+            model.addAttribute("error", "중복된 이름입니다."); // 에러 메시지를 모델에 추가
+            return "members/memberForm"; // 에러가 발생하면 원래 폼으로 돌아가기
         }
 
         redirectAttributes.addFlashAttribute("successMessage", "회원가입이 완료되었습니다!");
@@ -82,3 +91,4 @@ public class MemberController {
         return new ResponseEntity<String>("인증 코드를 올바르게 입력해주세요.",HttpStatus.BAD_REQUEST);
     }
 }
+

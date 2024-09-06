@@ -233,3 +233,4 @@ public class SearchController {
         return summonerSpells;
     }
 }
+

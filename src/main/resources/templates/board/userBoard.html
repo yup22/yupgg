@@ -166,7 +166,7 @@
 
 
                 if( currentUser === commentAuthor ){
-                    if(confirm('정말로 삭제하시겠습니까?')){
+                    if(confirm('댓글을 삭제하시겠습니까?')){
                         $.ajax({
                             url: '/board/userBoard/' + commentId + '/commentDelete', // 실제 삭제 요청 URL로 수정해야 합니다.
                             type: 'DELETE',

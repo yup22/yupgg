@@ -20,7 +20,6 @@
             width: 550px;
             margin: 0 auto;
             padding: 10px;
-            background-color: #fff;
             border-radius: 5px;
         }
 
@@ -116,6 +115,17 @@
 
         h3{
             margin-bottom: 20px;
+            color:#fff;
+
+        }
+        body {
+            background-image: url('/images/season-9-cg-splash-dravenriven.jpg');
+            background-size: cover;
+        }
+        label{
+            color:lightgray;
+            margin-bottom: 5px;
+            font-size: 14px;
         }
     </style>
 </th:block>
@@ -230,6 +240,7 @@
             <label th:for="name">이름</label>
             <input type="text" th:field="*{name}" class="form-control" placeholder="이름을 입력해주세요.">
             <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect date</p>
+            <p th:if="${error}" th:text="${error}" style="color:red;"></p>
         </div>
         <div class="form-group">
             <label th:for="email">이메일 주소</label>
@@ -238,7 +249,7 @@
             <button class="btn" id="e_2" type="button" onclick="mailSend()">인증 메일 전송</button>
         </div>
         <div class="form-group" id="c_1">
-            <label th:for="codeCheck" class="fr-bg">인증 코드</label>
+            <label th:for="codeCheck">인증 코드</label>
             <input type="text" class="form-control" id="codecheck" placeholder="인증 코드 입력 후 인증 확인 버튼을 눌러주세요">
             <button class="btn" id="c_2" type="button" onclick="codeCheck()">인증 확인</button>
         </div>

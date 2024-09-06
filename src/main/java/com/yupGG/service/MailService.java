@@ -27,7 +27,7 @@ public class MailService {
 
         String msgg="";
         msgg+="<div style='margin:20px;'>";
-        msgg+="<h1> 안녕하세요 WORKSIN 입니다. </h1>";
+        msgg+="<h1> 안녕하세요 YupGG 입니다. </h1>";
         msgg+="<br>";
         msgg+="<p>아래 코드를 복사해 입력해주세요.<p>";
         msgg+="<br>";
