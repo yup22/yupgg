@@ -9,6 +9,8 @@
 <img src="https://img.shields.io/badge/프로젝트 기간-2024.08.05 ~ 2024.09.06-skyblue?style=flat&logo=&logoColor=white" />
 
 </div> 
+- ** dd **
+
 
 <h2>기술 스택</h2>
 <div style="display:inline-block;">
