@@ -4,7 +4,7 @@
 <!-- logo -->
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/League_of_Legends_2019_vector.svg/320px-League_of_Legends_2019_vector.svg.png" width="180"/>
 
-<h1>YupGG - 리그오브레전드 전적검색 💼</h1>
+<h3>YupGG - 리그오브레전드 전적검색 💼</h3>
 
 <img src="https://img.shields.io/badge/프로젝트 기간-2024.08.05 ~ 2024.09.06-skyblue?style=flat&logo=&logoColor=white" />
 
