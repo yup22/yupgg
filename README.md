@@ -6,7 +6,7 @@
 
 <h1>YupGG - 리그오브레전드 전적검색 💼</h1>
 
-<img src="https://img.shields.io/badge/프로젝트 기간-2024.08.05 ~ 2024.09.06-pink?style=flat&logo=&logoColor=white" />
+<img src="https://img.shields.io/badge/프로젝트 기간-2024.08.05 ~ 2024.09.06-skyblue?style=flat&logo=&logoColor=white" />
 
 </div> 
 
