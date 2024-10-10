@@ -45,3 +45,6 @@
   <img src="https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white" />
 
 </div>
+
+## PPT
+<a href="https://github.com/yup22/yupgg/blob/main/YupGG.pdf">PPT</a>
