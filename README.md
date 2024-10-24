@@ -48,3 +48,7 @@
 
 ## PPT
 <a href="https://github.com/yup22/yupgg/blob/main/YupGG.pdf">PPT</a>
+
+## AWS
+<a href="http://ec2-52-79-214-163.ap-northeast-2.compute.amazonaws.com/">YupGG</a>
+
