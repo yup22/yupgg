@@ -1,8 +1,11 @@
 package com.yupGG.controller;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.yupGG.config.CustomOAuth2UserService;
+import com.yupGG.config.OAuthAttributes;
 import com.yupGG.dto.CommentDto;
 import com.yupGG.dto.PostDto;
+import com.yupGG.dto.SessionUser;
 import com.yupGG.entity.Comment;
 import com.yupGG.entity.Post;
 import com.yupGG.repository.PostRepository;
@@ -16,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +35,10 @@ import java.util.Optional;
 @RequestMapping("/board")
 public class BoardController {
 
+    @Autowired
+    private CustomOAuth2UserService customOAuth2UserService;
+    @Autowired
+    HttpSession httpSession;
     @Autowired
     private PostService postService;
     @Autowired
@@ -50,15 +58,16 @@ public class BoardController {
 
         model.addAttribute("posts", postPage.getContent());
         model.addAttribute("page", postPage);
-        return "/board/freeBoard";
+        return "board/freeBoard";
     }
 
     @GetMapping("/boardWrite")
-    public String writePost(Model model,Principal principal) {
-        System.out.println("글쓰기 컨트롤러");
+    public String writePost(Model model) {
 
-        model.addAttribute("user", principal.getName());
-        return "/board/boardWrite";
+        String name = postService.getLoginUserName();
+
+        model.addAttribute("user", name);
+        return "board/boardWrite";
     }
 
     @PostMapping("/save")
@@ -66,9 +75,9 @@ public class BoardController {
                        @RequestParam(name = "header") String header,
                        @RequestParam(name = "content") String content) {
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUser = authentication.getName();
-        System.out.println("ㅎㅇ save메서드야 ");
+/*        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUser = authentication.getName();*/
+        String currentUser = postService.getLoginUserName();
         PostDto postDto = new PostDto();
         postDto.setTitle(title);
         postDto.setHeader(header);
@@ -96,8 +105,10 @@ public class BoardController {
     @GetMapping("/userBoard/{id}")
     public String userBoard(@PathVariable("id") Long id, Model model) {
         Optional<Post> postOptional = postService.getPostById(id);
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUser = authentication.getName();
+/*        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUser = authentication.getName();*/
+        String currentUser = postService.getLoginUserName();
+
         model.addAttribute("user", currentUser);
 
         if (!postOptional.isPresent()) {
@@ -112,7 +123,7 @@ public class BoardController {
         model.addAttribute("id", id);
         model.addAttribute("comments", comments);
 
-        return "/board/userBoard"; // Thymeleaf 템플릿 파일 이름
+        return "board/userBoard"; // Thymeleaf 템플릿 파일 이름
     }
     @PostMapping("/userBoard/{postId}/comment")
     public ResponseEntity<Comment> createComment(@RequestBody CommentDto commentDto) {
@@ -178,7 +189,7 @@ public class BoardController {
         model.addAttribute("user", currentUser);
         model.addAttribute("post", post);
 
-        return "/board/boardWrite";
+        return "board/boardWrite";
     }
 
     @PostMapping("/userBoard/{postId}/edit")

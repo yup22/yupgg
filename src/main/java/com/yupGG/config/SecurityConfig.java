@@ -15,6 +15,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @EnableWebSecurity //웹보안 가능하게 한다.
 public class SecurityConfig {
+    @Autowired
+    private CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -29,11 +31,14 @@ public class SecurityConfig {
                 .loginPage("/members/login")
                 .defaultSuccessUrl("/")
                 .usernameParameter("email")
-                .failureUrl("/members/login/error")
+                .failureUrl("/members/login?error=true")
 
         ).logout(logout -> logout
                 .logoutRequestMatcher(new AntPathRequestMatcher("/members/logout"))
                 .logoutSuccessUrl("/")
+        ).oauth2Login(oauthLogin -> oauthLogin
+                .defaultSuccessUrl("/")
+                .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userService(customOAuth2UserService))
         );
 
         http.exceptionHandling(exception -> exception

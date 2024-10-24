@@ -32,39 +32,37 @@
 <div layout:fragment="content" style="height:100%;">
     <div class="container-fluid" style="height:600px;">
         <div id="main" class="row">
-            <aside id="left" class="col-3 rounded">
-            </aside>
-            <div class="ms-4 me-5 col-4" style="height:600px;">
-                <img src="/images/yupLogo.png" style="width:450px;" class="ms-5 py-3 mt-3 mb-5">
+            <div class="d-flex justify-content-center align-items-center" style="height:600px;">
+                <div class="text-center">
+                    <img src="/images/yupLogo.png" style="width:450px;" class="py-3 mt-3 mb-5">
 
-                <form class="row mt-3 pb-5 bg-white rounded-pill ms-5" id="searchForm" style=" width: 500px; height:50px;"
-                      action="/riot/summoners" method="get">
-                    <div class="my-2 col-2">
-                        <button type="button" class=" btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                            한국
+                    <form class="row mt-3 pb-5 bg-white rounded-pill mx-auto" id="searchForm" style="width: 500px; height: 50px;"
+                          action="/riot/summoners" method="get">
+                        <div class="my-2 col-2">
+                            <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                한국
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">한국</a></li>
+                            </ul>
+                        </div>
+                        <input name="summoners" id="summoners" class="col-6 form-control border-light my-2" type="search"
+                               placeholder="소환사 이름" aria-label="Search" style="width:250px; height:35px; text-align:center;">
+                        <input name="summonersTag" id="summonersTag" class="col-2 form-control border-light my-2" type="search"
+                               value="kr1" aria-label="Search" style="width:70px; height:35px; text-align:center;">
+
+                        <button class="btn col-2" type="submit" id="searchBtn" style="float:right;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+                                 stroke-linecap="round" stroke-linejoin="round" stroke-width="2" role="img" viewBox="0 0 24 24">
+                                <title>Search</title>
+                                <circle cx="10.5" cy="10.5" r="7.5"/>
+                                <path d="M21 21l-5.2-5.2"/>
+                            </svg>
                         </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">한국</a></li>
-                        </ul>
-                    </div>
-                    <input name="summoners" id="summoners" class="col-6 form-control border-light my-2" type="search"
-                           placeholder="소환사 이름" aria-label="Search" style="width:250px; height:35px; text-align:center;">
-                    <input name="summonersTag" id="summonersTag" class="col-2 form-control border-light my-2" type="search"
-                           value="kr1" aria-label="Search" style="width:70px; height:35px; text-align:center;">
-
-                    <button class="btn col-2" type="submit" id="searchBtn" style="float:right;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
-                             stroke-linecap="round" stroke-linejoin="round" stroke-width="2" role="img"
-                             viewBox="0 0 24 24">
-                            <title>Search</title>
-                            <circle cx="10.5" cy="10.5" r="7.5"/>
-                            <path d="M21 21l-5.2-5.2"/>
-                        </svg>
-                    </button>
-                </form>
+                    </form>
+                </div>
             </div>
-            <aside id="right" class="col-3 mx-5 rounded">
-            </aside>
+
         </div>
     </div>
 </div>
