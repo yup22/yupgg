@@ -19,6 +19,7 @@ public class Member extends BaseEntity {
     //알아서 설정
     @Column(name = "name", unique = false) // 중복 방지
     private String name;
+
     private String number;
 
     /// 중복 불허.

@@ -39,6 +39,7 @@ public class SecurityConfig {
         ).oauth2Login(oauthLogin -> oauthLogin
                 .defaultSuccessUrl("/")
                 .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig.userService(customOAuth2UserService))
+                .failureUrl("/members/login?error1=true")
         );
 
         http.exceptionHandling(exception -> exception
