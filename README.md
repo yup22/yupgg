@@ -52,3 +52,6 @@
 ## AWS
 <a href="http://ec2-52-79-214-163.ap-northeast-2.compute.amazonaws.com/">YupGG</a>
 
+## update
+- 10.24 소셜로그인 추가
+- 10.25 댓글 버그 수정
