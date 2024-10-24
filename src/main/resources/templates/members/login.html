@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{layouts/layout1}">
+      layout:decorate="~{layouts/layout1}">
 
 <head>
     <th:block layout:fragment="css"></th:block>
@@ -77,7 +77,7 @@
             background-image: url('/images/season-9-cg-splash-dravenriven.jpg');
             background-size: cover;
         }
-        
+
     </style>
     <script type="text/javascript" th:inline="javascript">
         window.onload = function() {
@@ -110,7 +110,7 @@
             <button class="btn btn-primary">로그인</button>
 
             <button type="button" class="btn btn-primary" onclick="location.href='/members/new'">회원가입</button>
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
             <br>
             <a href="/oauth2/authorization/google">
                 <img src="/images/google.png" alt="구글로그인">

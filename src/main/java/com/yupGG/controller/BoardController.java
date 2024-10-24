@@ -93,15 +93,15 @@ public class BoardController {
         return "redirect:/board/freeBoard"; // 글 작성 후 게시판 목록으로 이동
     }
 
- /*   @GetMapping("/userBoard/{id}")
-    public String userBoard(@PathVariable("id") Long id, Model model) {
-        return postService.getPostById(id)
-                .map(post -> {
-                    model.addAttribute("post", post);
-                    return "/board/userBoard"; // Thymeleaf 템플릿 파일 이름
-                })
-                .orElse("error"); // 에러 페이지 또는 다른 페이지로 리다이렉트
-    }*/
+    /*   @GetMapping("/userBoard/{id}")
+       public String userBoard(@PathVariable("id") Long id, Model model) {
+           return postService.getPostById(id)
+                   .map(post -> {
+                       model.addAttribute("post", post);
+                       return "/board/userBoard"; // Thymeleaf 템플릿 파일 이름
+                   })
+                   .orElse("error"); // 에러 페이지 또는 다른 페이지로 리다이렉트
+       }*/
     @GetMapping("/userBoard/{id}")
     public String userBoard(@PathVariable("id") Long id, Model model) {
         Optional<Post> postOptional = postService.getPostById(id);
